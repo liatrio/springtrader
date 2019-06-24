@@ -1,0 +1,16 @@
+apiVersion: skaffold/v1alpha2
+kind: Config
+build:
+  artifacts:
+  - imageName: springtrader 
+    workspace: .
+  local: {}
+
+deploy:
+  helm:
+    releases:
+      - name: springtrader 
+        chartPath: ./charts/springtrader
+        values:
+          image: springtrader 
+
