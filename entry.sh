@@ -21,10 +21,8 @@ mkdir /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/server1
 # Install RabbitMQ
 rpm -Uvh https://download.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 yum install erlang -y
-#yum install vfabric-rabbitmq-server -y
 
 echo '127.0.0.1 centos6 nanodbserver springtrader rabbitmq' >> /etc/hosts
-#service rabbitmq-server start
 
 # Start SQLFire
 sleep 30
