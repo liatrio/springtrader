@@ -25,7 +25,7 @@ yum install erlang -y
 echo '127.0.0.1 centos6 nanodbserver springtrader rabbitmq' >> /etc/hosts
 
 # Make sure SQLfire is up
-sleep 30
+sleep 60 
 
 cd /dist
 ./createSqlfSchema
