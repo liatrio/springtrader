@@ -15,3 +15,5 @@ spec:
         - name: springtrader-app 
           image: {{ .Values.image }}
 
+        - name: rabbitmq
+          image: rabbitmq

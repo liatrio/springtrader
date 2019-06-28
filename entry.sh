@@ -21,12 +21,13 @@ mkdir /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/server1
 # Install RabbitMQ
 rpm -Uvh https://download.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 yum install erlang -y
-yum install vfabric-rabbitmq-server -y
+#yum install vfabric-rabbitmq-server -y
 
-echo '127.0.0.1 centos6 nanodbserver' >> /etc/hosts
-service rabbitmq-server start
+echo '127.0.0.1 centos6 nanodbserver springtrader rabbitmq' >> /etc/hosts
+#service rabbitmq-server start
 
 # Start SQLFire
+sleep 30
 sqlf locator start -peer-discovery-address=127.0.0.1 -peer-discovery-port=3241 -dir=/opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/locator1 -client-port=1527 -client-bind-address=127.0.0.1
 sqlf server start -dir=/opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/server1 -client-bind-address=127.0.0.1 -client-port=1528 -locators=127.0.0.1[3241]
 

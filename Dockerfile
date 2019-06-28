@@ -29,7 +29,8 @@ RUN echo 'I_ACCEPT_EULA_LOCATED_AT=http://www.vmware.com/download/eula/vfabric_a
 # Install vFabric software
 RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-1.noarch.rpm
 RUN rpm -Uvh https://download.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-RUN yum install vfabric-tc-server-standard erlang vfabric-rabbitmq-server -y
+RUN yum install vfabric-tc-server-standard erlang -y
+#RUN yum vfabric-rabbitmq-server -y
 
 # Handle SQLFire jars
 WORKDIR /
