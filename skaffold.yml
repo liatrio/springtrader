@@ -2,8 +2,8 @@ apiVersion: skaffold/v1alpha2
 kind: Config
 build:
   artifacts:
-  - imageName: sqlfire
-    workspace: ./sqlf
+  - imageName: sqlfdb 
+    workspace: ./sqlfdb
 
   - imageName: springtrader 
     workspace: .
@@ -18,4 +18,4 @@ deploy:
         chartPath: ./charts/springtrader
         values:
           image: springtrader 
-          sqlfire: sqlfire
+          sqlfire: sqlfdb 

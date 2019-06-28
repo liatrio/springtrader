@@ -1,1 +1,0 @@
-Directory contains open source project source code for libraries that mandate source inclusion per license.
