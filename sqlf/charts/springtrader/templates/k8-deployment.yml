@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: springtrader-app 
+spec:
+    selector:
+      matchLabels:
+        app: springtrader-app 
+    template:
+      metadata:
+        labels:
+            app: springtrader-app 
+      spec:
+        containers:
+        - name: springtrader-app 
+          image: {{ .Values.image }}
+
+        - name: rabbitmq
+          image: rabbitmq
+	
+	- name: sqlfire
+	  image: sqlfire

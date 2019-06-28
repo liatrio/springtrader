@@ -1,0 +1,54 @@
+<div class="row clearfix">
+    <div class="span9 columns">
+        <form class="form-horizontal">
+            <fieldset>
+                <h3><%= translate("contactUs") %></h3>
+                <div id="contact-error" class="hide span8 alert alert-block alert-error fade in">
+                    <a data-dismiss="alert" class="close">x</a>
+                    <h4 class="alert-heading"><%= translate("ohSnap") %></h4>
+                    <p></p>
+                </div>
+				<div class="row span4">
+                	<div class="control-group">
+	                    <label for="name-input" class="control-label"><%= translate("name") %></h3>:</label>
+	                    <div class="controls">
+	                        <input type="text" value="" id="name-input" class="span4 focused" maxlength="100">
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                    <label class="control-label"><%= translate("email") %></h3>:</label>
+	                    <div class="controls">
+	                        <input type="text" value="" id="email-input" class="span4 focused" maxlength="100">
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                    <label class="control-label"><%= translate("phone") %>:</label>
+	                    <div class="controls">
+	                        <input type="text" value="" id="phone-input" class="span4 focused" maxlength="100">
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                    <label class="control-label"><%= translate("message") %>:</label>
+	                    <div class="controls">
+	                        <textarea rows="3" id="message-input" class="span4"></textarea>
+	                    </div>
+	                </div>
+	                <div class="form-actions">
+	                    <button id="sendBtn" class="btn green-btn"><%= translate("send") %></button>
+	                </div>
+				</div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="span2 sidebar">
+        <h3><%= translate('nearestLocation') %></h3>
+        <p><%= location %></p>
+    </div>
+    <% if (!nano.utils.loggedIn()) { %>
+     <div class="span2 columns sidebar">
+        <h3><%= translate("nanoTraderLogin") %></h3>
+        <p><%= translate("alreadyRegistered") %></p>
+        <p><a id="showLoginBtn"><%= translate("goToLoginPage") %></a></p>
+    </div>
+    <% } %>
+</div>
