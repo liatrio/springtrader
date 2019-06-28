@@ -24,10 +24,8 @@ yum install erlang -y
 
 echo '127.0.0.1 centos6 nanodbserver springtrader rabbitmq' >> /etc/hosts
 
-# Start SQLFire
+# Make sure SQLfire is up
 sleep 30
-sqlf locator start -peer-discovery-address=127.0.0.1 -peer-discovery-port=3241 -dir=/opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/locator1 -client-port=1527 -client-bind-address=127.0.0.1
-sqlf server start -dir=/opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/server1 -client-bind-address=127.0.0.1 -client-port=1528 -locators=127.0.0.1[3241]
 
 cd /dist
 ./createSqlfSchema

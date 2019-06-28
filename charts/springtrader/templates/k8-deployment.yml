@@ -17,3 +17,6 @@ spec:
 
         - name: rabbitmq
           image: rabbitmq
+
+        - name: sqlfire
+          image: {{ .Values.sqlfire }}
