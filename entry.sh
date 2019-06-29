@@ -25,12 +25,17 @@ yum install erlang -y
 echo '127.0.0.1 centos6 nanodbserver springtrader rabbitmq' >> /etc/hosts
 
 # Make sure SQLfire is up
-sleep 60 
+echo 'GOING TO SLEEP'
+sleep 35 
+echo 'DONE SLEEPING'
+
 
 cd /dist
+echo 'createSqlfSchema'
 ./createSqlfSchema
+echo 'SPRINGTRADER START'
 /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh start springtrader
-sleep 30
 cd /dist
+echo 'GENERATE DATA'
 ./generateData
 tail -f /dev/null

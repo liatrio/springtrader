@@ -12,11 +12,12 @@ spec:
             app: springtrader-app 
       spec:
         containers:
-        - name: springtrader-app 
+        - name: sqlfdb
+          image: {{ .Values.sqlfdb }}
+
+        - name: springtrader
           image: {{ .Values.image }}
 
         - name: rabbitmq
-          image: rabbitmq
+          image: rabbitmq:latest
 
-        - name: sqlfire
-          image: {{ .Values.sqlfire }}

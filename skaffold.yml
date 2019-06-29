@@ -8,7 +8,6 @@ build:
   - imageName: springtrader 
     workspace: .
 
-
   local: {}
 
 deploy:
@@ -18,4 +17,4 @@ deploy:
         chartPath: ./charts/springtrader
         values:
           image: springtrader 
-          sqlfire: sqlfdb 
+          sqlfdb: sqlfdb 

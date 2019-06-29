@@ -60,4 +60,6 @@ RUN yes | cp /sqlfireclient.jar /opt/vmware/vfabric-tc-server-standard/springtra
 COPY entry.sh .
 RUN chmod +x entry.sh
 
+EXPOSE 3241 1527 1528
+
 ENTRYPOINT ["./entry.sh"]
