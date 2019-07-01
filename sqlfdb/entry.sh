@@ -1,5 +1,4 @@
 #!/bin/bash
-echo '127.0.0.1 centos6 nanodbserver' >> /etc/hosts
 
 # Start SQLFire
 echo 'STARTING SQLFIRE DB'
