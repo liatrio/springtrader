@@ -1,4 +1,5 @@
 FROM openjdk:7 as builder
+
 RUN mkdir springtrader
 WORKDIR /springtrader
 ADD build.gradle gradle.properties settings.gradle gradlew ./
@@ -10,17 +11,18 @@ RUN ./gradlew clean build release
 ################################################################################
 
 FROM centos:centos6
-ENV GROOVY_HOME=/usr/groovy/groovy-2.3.0-beta-2
-ENV PATH=$PATH:$GROOVY_HOME/bin
 ENV JAVA_HOME=/usr
 
-RUN yum install git wget unzip java-1.7.0-openjdk-devel -y
+RUN yum install wget unzip java-1.7.0-openjdk-devel -y
+
 
 # Install Groovy
-RUN mkdir /usr/groovy/
-WORKDIR groovy/
+WORKDIR /usr/bin
 RUN wget http://dl.bintray.com/groovy/maven/groovy-binary-2.3.0-beta-2.zip
-RUN unzip groovy-binary-2.3.0-beta-2.zip && rm -f groovy-binary-2.3.0-beta-2.zip
+RUN unzip groovy-binary-2.3.0-beta-2.zip && \
+    mv groovy-2.3.0-beta-2/bin/* . &&  \
+    mv groovy-2.3.0-beta-2/* . && \
+    rm -f groovy-binary-2.3.0-beta-2.zip
 
 # Accept VMware certificate
 RUN mkdir -p /etc/vmware/vfabric/

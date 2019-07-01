@@ -1,12 +1,4 @@
 #!/bin/bash
-export GROOVY_HOME=/usr/groovy/groovy-2.3.0-beta-2
-export PATH=$PATH:$GROOVY_HOME/bin
-
-# Install Groovy
-mkdir /usr/groovy
-cd /usr/groovy/
-wget http://dl.bintray.com/groovy/maven/groovy-binary-2.3.0-beta-2.zip
-unzip groovy-binary-2.3.0-beta-2.zip && rm -f groovy-binary-2.3.0-beta-2.zip
 
 # Accept VMWare scripts
 mkdir -p /etc/vmware/vfabric/
