@@ -1,19 +1,19 @@
-###DEV###
-FROM springtraderdev as builder
-RUN echo 'DEV'
+### DEV - Use a seperate image that contains the expected gradle artifacts to save significant time when developing###
+#FROM springtraderdev as builder
+#RUN echo 'DEV'
 
 
 ################################################################################
 
-#FROM openjdk:7 as builder
-#
-#RUN mkdir springtrader
-#WORKDIR /springtrader
-#ADD build.gradle gradle.properties settings.gradle gradlew ./
-#ADD .wrapper/ ./.wrapper
-#RUN ./gradlew build
-#ADD . .
-#RUN ./gradlew clean build release
+FROM openjdk:7 as builder
+
+RUN mkdir springtrader
+WORKDIR /springtrader
+ADD build.gradle gradle.properties settings.gradle gradlew ./
+ADD .wrapper/ ./.wrapper
+RUN ./gradlew build
+ADD . .
+RUN ./gradlew clean build release
 
 ################################################################################
 
