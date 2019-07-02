@@ -1,25 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: springtrader-app 
+    name: springtrader-app
 spec:
     selector:
       matchLabels:
-        app: springtrader-app 
+        app: springtrader-app
     template:
       metadata:
         labels:
-            app: springtrader-app 
+            app: springtrader-app
       spec:
+        hostAliases:
+          - ip: "127.0.0.1"
+            hostnames:
+            - "centos6"
+            - "nanodbserver"
         containers:
-#        - name: sqlfdb
-#          image: {{ .Values.sqlfdb }}
-
         - name: sqlflocator
           image: {{ .Values.sqlfdb }}
           command: ["/bin/sh","-c"]
-          args: ["sqlf locator start \ 
-          -peer-discovery-address=127.0.0.1 \ 
+          args: ["sqlf locator start \
+          -peer-discovery-address=127.0.0.1 \
           -peer-discovery-port=3241 -dir=/opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/locator1 \
           -client-port=1527 \
           -client-bind-address=127.0.0.1 \
@@ -38,7 +40,7 @@ spec:
 
         - name: springtrader
           image: {{ .Values.image }}
-          env: 
+          env:
           - name: GROOVY_HOME
             value: '/usr/bin'
 
