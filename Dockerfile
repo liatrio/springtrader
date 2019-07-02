@@ -1,19 +1,11 @@
-###DEV###
-FROM spring-trader-build as builder
-RUN echo 'DEV'
+FROM openjdk:7 as builder
 
-
-################################################################################
-
-#FROM openjdk:7 as builder
-#
-#RUN mkdir springtrader
-#WORKDIR /springtrader
-#ADD build.gradle gradle.properties settings.gradle gradlew ./
-#ADD .wrapper/ ./.wrapper
-#RUN ./gradlew build
-#ADD . .
-#RUN ./gradlew clean build release
+WORKDIR /springtrader
+ADD build.gradle gradle.properties settings.gradle gradlew ./
+ADD .wrapper/ ./.wrapper
+RUN ./gradlew build
+ADD . .
+RUN ./gradlew clean build release
 
 ################################################################################
 FROM centos:centos6

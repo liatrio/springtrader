@@ -12,8 +12,3 @@ RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-
 RUN yum install vfabric-sqlfire -y
 RUN mkdir /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/locator1
 RUN mkdir /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/server1
-
-COPY entry.sh .
-RUN chmod +x entry.sh
-
-ENTRYPOINT ["./entry.sh"]
