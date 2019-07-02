@@ -1,12 +1,19 @@
-FROM openjdk:7 as builder
+###DEV###
+FROM springtraderdev as builder
+RUN echo 'DEV'
 
-RUN mkdir springtrader
-WORKDIR /springtrader
-ADD build.gradle gradle.properties settings.gradle gradlew ./
-ADD .wrapper/ ./.wrapper
-RUN ./gradlew build
-ADD . .
-RUN ./gradlew clean build release
+
+################################################################################
+
+#FROM openjdk:7 as builder
+#
+#RUN mkdir springtrader
+#WORKDIR /springtrader
+#ADD build.gradle gradle.properties settings.gradle gradlew ./
+#ADD .wrapper/ ./.wrapper
+#RUN ./gradlew build
+#ADD . .
+#RUN ./gradlew clean build release
 
 ################################################################################
 
@@ -30,8 +37,8 @@ RUN echo 'I_ACCEPT_EULA_LOCATED_AT=http://www.vmware.com/download/eula/vfabric_a
 
 # Install vFabric software
 RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-1.noarch.rpm
-RUN rpm -Uvh https://download.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-RUN yum install vfabric-tc-server-standard erlang -y
+#RUN rpm -Uvh https://download.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+RUN yum install vfabric-tc-server-standard -y
 
 # Handle SQLFire jars
 WORKDIR /
