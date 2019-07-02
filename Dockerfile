@@ -58,7 +58,6 @@ WORKDIR /app
 ENTRYPOINT echo 'GOING TO SLEEP' && \
            sleep 180 && \
            echo 'DONE SLEEPING' && \
-           echo '127.0.0.1 centos6 nanodbserver' >> /etc/hosts && \
            echo 'createSqlfSchema' && \
            ./createSqlfSchema && \
            echo 'SPRINGTRADER START' && \
