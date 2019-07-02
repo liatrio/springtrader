@@ -1,33 +1,18 @@
 #!/bin/bash
 
-# Accept VMWare scripts
-mkdir -p /etc/vmware/vfabric/
-echo 'I_ACCEPT_EULA_LOCATED_AT=http://www.vmware.com/download/eula/vfabric_app-platform_eula.html' > /etc/vmware/vfabric/accept-vfabric5.1-eula.txt
-
-# Install SQLFire
-rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-1.noarch.rpm
-yum install vfabric-sqlfire -y
-mkdir /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/locator1
-mkdir /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/server1
-
-# Install RabbitMQ
-rpm -Uvh https://download.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-yum install erlang -y
+# Make sure SQLfire is up
+echo 'GOING TO SLEEP'
+sleep 180
+echo 'DONE SLEEPING'
 
 echo '127.0.0.1 centos6 nanodbserver springtrader rabbitmq' >> /etc/hosts
 
-# Make sure SQLfire is up
-echo 'GOING TO SLEEP'
-sleep 35 
-echo 'DONE SLEEPING'
-
-
-cd /dist
+cd /app
 echo 'createSqlfSchema'
 ./createSqlfSchema
 echo 'SPRINGTRADER START'
 /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh start springtrader
-cd /dist
+cd /app
 echo 'GENERATE DATA'
 ./generateData
 tail -f /dev/null

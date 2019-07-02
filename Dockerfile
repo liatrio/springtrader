@@ -1,5 +1,5 @@
 ###DEV###
-FROM springtraderdev as builder
+FROM spring-trader-build as builder
 RUN echo 'DEV'
 
 
@@ -16,12 +16,17 @@ RUN echo 'DEV'
 #RUN ./gradlew clean build release
 
 ################################################################################
-
 FROM centos:centos6
 ENV JAVA_HOME=/usr
 
-RUN yum install wget unzip java-1.7.0-openjdk-devel -y
+# Accept VMware certificate
+RUN mkdir -p /etc/vmware/vfabric/ && \
+    echo 'I_ACCEPT_EULA_LOCATED_AT=http://www.vmware.com/download/eula/vfabric_app-platform_eula.html' \
+    > /etc/vmware/vfabric/accept-vfabric5.1-eula.txt
 
+# Install vFabric software
+RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-1.noarch.rpm && \
+    yum install wget unzip java-1.7.0-openjdk-devel vfabric-tc-server-standard -y
 
 # Install Groovy
 WORKDIR /usr/bin
@@ -31,44 +36,32 @@ RUN unzip groovy-binary-2.3.0-beta-2.zip && \
     mv groovy-2.3.0-beta-2/* . && \
     rm -f groovy-binary-2.3.0-beta-2.zip
 
-# Accept VMware certificate
-RUN mkdir -p /etc/vmware/vfabric/
-RUN echo 'I_ACCEPT_EULA_LOCATED_AT=http://www.vmware.com/download/eula/vfabric_app-platform_eula.html' > /etc/vmware/vfabric/accept-vfabric5.1-eula.txt
+WORKDIR /app
 
-# Install vFabric software
-RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-1.noarch.rpm
-#RUN rpm -Uvh https://download.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-RUN yum install vfabric-tc-server-standard -y
+# Add sqlfire client to data generation dependencies
+COPY --from=builder /springtrader/dist/DataGenerator.zip .
+RUN unzip DataGenerator.zip && \
+    wget -P libs/ https://repo.spring.io/plugins-release/com/vmware/sqlfire/sqlfireclient/1.0.3/sqlfireclient-1.0.3.jar
 
-# Handle SQLFire jars
-WORKDIR /
-COPY --from=builder /springtrader/dist /dist
-RUN wget https://repo.spring.io/plugins-release/com/vmware/sqlfire/sqlfireclient/1.0.3/sqlfireclient-1.0.3.jar -O sqlfireclient.jar
-RUN mkdir /templates
-
-WORKDIR /dist
-RUN unzip DataGenerator.zip
-RUN cp /sqlfireclient.jar /dist/libs/sqlfireclient-1.0.3.jar
-
-# Retrieve SpringTrader template
-COPY --from=builder /springtrader/templates/ /templates
-RUN ls /templates
-RUN cp /sqlfireclient.jar /templates/springtrader/lib/sqlfireclient.jar
+# Copy template artifact to tc-server
+COPY --from=builder /springtrader/templates/springtrader /opt/vmware/vfabric-tc-server-standard/templates/springtrader
+RUN cp libs/sqlfireclient-1.0.3.jar /opt/vmware/vfabric-tc-server-standard/templates/springtrader/lib/sqlfireclient.jar
 
 # Copy artifacts to server
 WORKDIR /opt/vmware/vfabric-tc-server-standard
-RUN cp -r /templates/springtrader/ templates/
 RUN ./tcruntime-instance.sh create springtrader -t springtrader -f templates/springtrader/sqlfire.properties
-RUN cp /dist/spring-nanotrader-asynch-services-1.0.1.BUILD-SNAPSHOT.war /opt/vmware/vfabric-tc-server-standard/springtrader/webapps/spring-nanotrader-asynch-services.war
-RUN cp /dist/spring-nanotrader-services-1.0.1.BUILD-SNAPSHOT.war /opt/vmware/vfabric-tc-server-standard/springtrader/webapps/spring-nanotrader-services.war
-RUN cp /dist/spring-nanotrader-web-1.0.1.BUILD-SNAPSHOT.war /opt/vmware/vfabric-tc-server-standard/springtrader/webapps/spring-nanotrader-web.war
+COPY --from=builder /springtrader/dist/spring-nanotrader-asynch-services-1.0.1.BUILD-SNAPSHOT.war springtrader/webapps/spring-nanotrader-asynch-services.war
+COPY --from=builder /springtrader/dist/spring-nanotrader-services-1.0.1.BUILD-SNAPSHOT.war springtrader/webapps/spring-nanotrader-services.war
+COPY --from=builder /springtrader/dist/spring-nanotrader-web-1.0.1.BUILD-SNAPSHOT.war springtrader/webapps/spring-nanotrader-web.war
 
-WORKDIR /opt/vmware/vfabric-tc-server-standard/springtrader/bin
-RUN echo 'JVM_OPTS="-Xmx1024m -Xss192K -XX:MaxPermSize=192m"' >> setenv.sh
-RUN yes | cp /sqlfireclient.jar /opt/vmware/vfabric-tc-server-standard/springtrader/lib/sqlfireclient.jar
-COPY entry.sh .
-RUN chmod +x entry.sh
-
-EXPOSE 3241 1527 1528
-
-ENTRYPOINT ["./entry.sh"]
+ENTRYPOINT echo 'GOING TO SLEEP' && \
+           sleep 180 && \
+           echo 'DONE SLEEPING' && \
+           echo '127.0.0.1 centos6 nanodbserver' >> /etc/hosts && \
+           echo 'createSqlfSchema' && \
+           /app/createSqlfSchema && \
+           echo 'SPRINGTRADER START' && \
+           /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh start springtrader && \
+           echo 'GENERATE DATA' && \
+           /app/generateData && \
+           tail -f /dev/null
