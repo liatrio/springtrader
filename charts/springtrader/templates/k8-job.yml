@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sqlcheck
+spec:
+  template:
+    spec:
+#      hostAliases:
+#      - ip: "127.0.0.1"
+#        hostnames:
+#        - "centos6"
+#        - "nanodbserver"
+      initContainers:
+      - name: init-sqlcheck
+        image: {{ .Values.image }}
+        command: ["/bin/sh","-c"]
+        args: ["curl springtrader-app:8080/spring-nanotrader-web"]
+#        args: ["until nslookup springtrader-app; do echo waiting for springtrader-app; sleep 2; done;"]
+      containers:
+      - name: sqlcheck
+        image: {{ .Values.image }}
+        command: ["/bin/sh","-c"]
+        args: ["sleep 60 && ./createSqlfSchema && ./generateData"]
+        env:
+        - name: GROOVY_HOME
+          value: '/usr/bin'
+      - name: test
+        image: {{ .Values.image }}
+        command: ["/bin/sh","-c"]
+        args: ["ls && tail -f /dev/null"]
+        env:
+        - name: GROOVY_HOME
+          value: '/usr/bin'
+      restartPolicy: Never
+#args: ["curl localhost:8080/spring-nanotrader-web"]

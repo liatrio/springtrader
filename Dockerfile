@@ -1,5 +1,5 @@
 ###DEV###
-FROM spring-trader-build as builder
+FROM springtraderdev as builder
 RUN echo 'DEV'
 
 ################################################################################
@@ -55,13 +55,13 @@ COPY --from=builder /springtrader/dist/spring-nanotrader-web-1.0.1.BUILD-SNAPSHO
 
 WORKDIR /app
 
-ENTRYPOINT echo 'GOING TO SLEEP' && \
-           sleep 180 && \
-           echo 'DONE SLEEPING' && \
-           echo 'createSqlfSchema' && \
-           ./createSqlfSchema && \
-           echo 'SPRINGTRADER START' && \
-           /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh start springtrader && \
-           echo 'GENERATE DATA' && \
-           ./generateData && \
+ENTRYPOINT echo 'GOING TO SLEEP 30'; \
+#           sleep 30 && \
+           echo 'DONE SLEEPING'; \
+           echo 'createSqlfSchema'; \
+           ./createSqlfSchema; \
+           echo 'SPRINGTRADER START'; \
+           /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh start springtrader; \
+           echo 'GENERATE DATA'; \
+           ./generateData;\
            tail -f /dev/null
