@@ -4,38 +4,18 @@ metadata:
   name: springtrader-app
 spec:
   selector:
-    app: springtrader-app 
+    app: springtrader-app
   ports:
-  - name: frontend 
+  - name: frontend
     port: 8080
     protocol: TCP
     targetPort: 8080
   - name: dblocator
-    port: 1527 
-    protocol: TCP
-    targetPort: 1527
-  - name: dbserver
-    port: 1528 
-    protocol: TCP
-    targetPort: 1528
-  type: LoadBalancer #Change to clusterIp look at knowledge-share-app for ingress example
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: nanodbserver
-spec:
-  selector:
-    app: springtrader-app
-  ports:
-  - name: dbl
     port: 1527
     protocol: TCP
     targetPort: 1527
-  - name: dbs
+  - name: dbserver
     port: 1528
     protocol: TCP
     targetPort: 1528
-  type: LoadBalancer
+  type: ClusterIP #Change to clusterIp look at knowledge-share-app for ingress example

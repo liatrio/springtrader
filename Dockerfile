@@ -1,20 +1,19 @@
 ###DEV###
-FROM springtraderdev as builder
-RUN echo 'DEV'
+# FROM spring-trader-build as builder
+# RUN echo 'DEV'
+
+FROM openjdk:7 as builder
+
+RUN mkdir springtrader
+WORKDIR /springtrader
+ADD build.gradle gradle.properties settings.gradle gradlew ./
+ADD .wrapper/ ./.wrapper
+RUN ./gradlew build
+ADD . .
+RUN ./gradlew clean build release
 
 ################################################################################
-#
-# FROM openjdk:7 as builder
-#
-# RUN mkdir springtrader
-# WORKDIR /springtrader
-# ADD build.gradle gradle.properties settings.gradle gradlew ./
-# ADD .wrapper/ ./.wrapper
-# RUN ./gradlew build
-# ADD . .
-# RUN ./gradlew clean build release
 
-################################################################################
 FROM centos:centos6
 ENV JAVA_HOME=/usr
 
@@ -55,13 +54,7 @@ COPY --from=builder /springtrader/dist/spring-nanotrader-web-1.0.1.BUILD-SNAPSHO
 
 WORKDIR /app
 
-ENTRYPOINT echo 'GOING TO SLEEP 30'; \
-#           sleep 30 && \
-           echo 'DONE SLEEPING'; \
-           echo 'createSqlfSchema'; \
-           ./createSqlfSchema; \
-           echo 'SPRINGTRADER START'; \
-           /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh start springtrader; \
-           echo 'GENERATE DATA'; \
-           ./generateData;\
-           tail -f /dev/null
+ENTRYPOINT echo 'createSqlfSchema' && \
+           ./createSqlfSchema && \
+           echo 'SPRINGTRADER RUN' && \
+           /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh run springtrader
