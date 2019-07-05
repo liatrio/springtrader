@@ -18,4 +18,4 @@ spec:
     port: 1528
     protocol: TCP
     targetPort: 1528
-  type: ClusterIP #Change to clusterIp look at knowledge-share-app for ingress example
+  type: LoadBalancer
