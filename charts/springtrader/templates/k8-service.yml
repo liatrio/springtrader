@@ -4,10 +4,18 @@ metadata:
   name: springtrader-app
 spec:
   selector:
-    app: springtrader-app 
+    app: springtrader-app
   ports:
-  - port: 8080
+  - name: frontend
+    port: 8080
     protocol: TCP
     targetPort: 8080
-  type: LoadBalancer
-
+  - name: dblocator
+    port: 1527
+    protocol: TCP
+    targetPort: 1527
+  - name: dbserver
+    port: 1528
+    protocol: TCP
+    targetPort: 1528
+  type: ClusterIP #Change to clusterIp look at knowledge-share-app for ingress example

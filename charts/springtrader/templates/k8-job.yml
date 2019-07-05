@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sqlcheck
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: init-sqlcheck
+        image: {{ .Values.image }}
+        command: ["/bin/sh","-c"]
+        args: ["curl springtrader-app:8080/spring-nanotrader-web"]
+      containers:
+      - name: sqlcheck
+        image: {{ .Values.image }}
+        command: ["/bin/sh","-c"]
+        args: ["sed -i 's/localhost/springtrader-app/g' nanotrader.properties && ./generateData"]
+        env:
+        - name: GROOVY_HOME
+          value: '/usr/bin'
+      restartPolicy: Never
