@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: springtrader-app
+spec:
+    selector:
+      matchLabels:
+        app: springtrader-app
+    template:
+      metadata:
+        labels:
+            app: springtrader-app
+      spec:
+        hostAliases:
+          - ip: "127.0.0.1"
+            hostnames:
+            - "centos6"
+            - "nanodbserver"
+        containers:
+        - name: sqlflocator
+          image: {{ .Values.sqlfdb }}
+          command: ["/bin/sh","-c"]
+          args: ["sqlf locator start \
+          -peer-discovery-address=127.0.0.1 \
+          -peer-discovery-port=3241 -dir=/opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/locator1 \
+          -client-port=1527 \
+          -client-bind-address=0.0.0.0 \
+	        -bind-address=127.0.0.1 \
+          && tail -f /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/locator1/sqlflocator.log"]
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - grep "started and ready to accept connections" /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/locator1/sqlflocator.log
+            initialDelaySeconds: 5
+            periodSeconds: 15
+        - name: sqlfserver
+          image: {{ .Values.sqlfdb }}
+          command: ["/bin/sh","-c"]
+          args: ["sqlf server start \
+          -dir=/opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/server1 \
+          -client-bind-address=0.0.0.0 \
+          -client-port=1528 -locators=127.0.0.1[3241] \
+          -bind-address=127.0.0.1 \
+          && tail -f /opt/vmware/vfabric-sqlfire/vFabric_SQLFire_103/server1/sqlfserver.log"]
+        - name: springtrader
+          image: {{ .Values.image }}
+          env:
+          - name: GROOVY_HOME
+            value: '/usr/bin'
+        - name: rabbitmq
+          image: rabbitmq
+
