@@ -1,12 +1,19 @@
-apiVersion: skaffold/v1alpha2
+apiVersion: skaffold/v1beta12
 kind: Config
 build:
   artifacts:
-  - imageName: springtrader 
-    workspace: .
-
-  - imageName: sqlfdb 
-    workspace: ./sqlfdb
+  - image: gradle-builder
+    context: .
+    docker:
+      target: builder
+  - image: docker.artifactory.liatr.io/liatrio/springtrader
+    context: .
+    docker:
+      cacheFrom:
+        - gradle-builder
+        - docker.artifactory.liatr.io/liatrio/springtrader
+  - image: sqlfdb 
+    context: ./sqlfdb
 
   local: {}
 
@@ -16,5 +23,5 @@ deploy:
       - name: springtrader 
         chartPath: ./charts/springtrader
         values:
-          image: springtrader 
+          image: docker.artifactory.liatr.io/liatrio/springtrader 
           sqlfdb: sqlfdb 
