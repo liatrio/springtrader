@@ -3,13 +3,10 @@ kind: Config
 build:
   artifacts:
   - image: springtrader
-    context: .
     docker:
-      target: runner
-      buildArgs:
-        target: runner
-        tag: docker.artifactory.liatr.io/liatrio/springtrader:latest
-        cache-from: gradle-builder,docker.artifactory.liatr.io/liatrio/springtrader
+      cacheFrom:
+        - docker.artifactory.liatr.io/liatrio/springtrader-builder:latest
+        - docker.artifactory.liatr.io/liatrio/springtrader-runner:latest
   - image: sqlfdb 
     context: ./sqlfdb
   local: {}
@@ -20,5 +17,5 @@ deploy:
       - name: springtrader 
         chartPath: ./charts/springtrader
         values:
-          image: docker.artifactory.liatr.io/liatrio/springtrader 
+          image: springtrader 
           sqlfdb: sqlfdb 

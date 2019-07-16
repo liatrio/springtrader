@@ -6,10 +6,10 @@ FROM openjdk:7 as builder
 
 RUN mkdir springtrader
 WORKDIR /springtrader
-ADD build.gradle gradle.properties settings.gradle gradlew ./
-ADD .wrapper/ ./.wrapper
+COPY build.gradle gradle.properties settings.gradle gradlew ./
+COPY .wrapper/ ./.wrapper
 RUN ./gradlew build
-ADD . .
+COPY . .
 RUN ./gradlew clean build release
 
 ################################################################################
