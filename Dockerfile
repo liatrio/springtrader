@@ -14,7 +14,7 @@ RUN ./gradlew clean build release
 
 ################################################################################
 
-FROM centos:centos6
+FROM centos:centos6 as runner
 ENV JAVA_HOME=/usr
 
 # Accept VMware certificate

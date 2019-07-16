@@ -2,19 +2,16 @@ apiVersion: skaffold/v1beta12
 kind: Config
 build:
   artifacts:
-  - image: gradle-builder
+  - image: springtrader
     context: .
     docker:
-      target: builder
-  - image: docker.artifactory.liatr.io/liatrio/springtrader
-    context: .
-    docker:
-      cacheFrom:
-        - gradle-builder
-        - docker.artifactory.liatr.io/liatrio/springtrader
+      target: runner
+      buildArgs:
+        target: runner
+        tag: docker.artifactory.liatr.io/liatrio/springtrader:latest
+        cache-from: gradle-builder,docker.artifactory.liatr.io/liatrio/springtrader
   - image: sqlfdb 
     context: ./sqlfdb
-
   local: {}
 
 deploy:
