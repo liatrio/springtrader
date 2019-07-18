@@ -142,16 +142,19 @@ def sellOrders() {
 }
 
 def checkForData() {
-  def url = 'jdbc:sqlfire://nanodbserver:1527'
+  def url = 'jdbc:sqlfire://springtrader-app:1527'
   def sqlf = Sql.newInstance(url, 'nanotrader', 'nanotrader', 'com.vmware.sqlfire.jdbc.ClientDriver')
+  def dataExists = true
   sqlf.query('SELECT * FROM ACCOUNT') { resultSet ->
     if(resultSet.next()){
-      return true
+      println 'DATA FOUND'
+    } else {
+    println 'DATA MISSING'
+    dataExists = false
     }
-    return false
   }
-
   sqlf.close()
+  return dataExists
 }
 
 loadProps()
