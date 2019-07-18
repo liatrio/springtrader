@@ -141,8 +141,24 @@ def sellOrders() {
   } 
 }
 
+def checkForData() {
+  def url = 'jdbc:sqlfire://nanodbserver:1527'
+  def sqlf = Sql.newInstance(url, 'nanotrader', 'nanotrader', 'com.vmware.sqlfire.jdbc.ClientDriver')
+  sqlf.query('SELECT * FROM ACCOUNT') { resultSet ->
+    if(resultSet.next()){
+      return true
+    }
+    return false
+  }
+
+  sqlf.close()
+}
+
 loadProps()
 // createQuotes()
+if(checkForData()){
+  return
+}
 registerUsers()
 getTokens()
 buyOrders()
