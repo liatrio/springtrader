@@ -52,6 +52,9 @@ pipeline {
 
     /// [gate]
     stage ('Manual Ready Check') {
+      options {
+        timeout(time: 30, unit: 'MINUTES')
+      }
       when {
         branch 'master'
       }
