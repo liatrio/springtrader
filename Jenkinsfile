@@ -53,7 +53,7 @@ pipeline {
     }
     /// [stage]
 
-    /// [gate]
+/*    /// [gate]
     stage ('Manual Ready Check') {
       when {
         branch 'master'
@@ -95,6 +95,7 @@ pipeline {
       }
     }
     /// [prod]
+  */
   }
   post {
     success {
