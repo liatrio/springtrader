@@ -6,6 +6,9 @@ pipeline {
   stages {
     /// [build]
     stage('Build') {
+      when {
+          branch 'master'
+      }
       steps {
         notifyPipelineStart()
         notifyStageStart()
