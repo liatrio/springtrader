@@ -20,7 +20,7 @@ pipeline {
           notifyStageEnd()
         }
         failure {
-          notifyStageEnd([result: "Build Failed"])
+          notifyStageEnd([result: "fail"])
         }
       }
     }
@@ -50,7 +50,7 @@ pipeline {
           notifyStageEnd([status: "Successfully deployed to staging:\nspringtrader.${env.stagingDomain}/spring-nanotrader-web/"])
         }
         failure {
-          notifyStageEnd([result: "Deploy failed"])
+          notifyStageEnd([result: "fail"])
         }
       }
     }
