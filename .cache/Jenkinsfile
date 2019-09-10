@@ -3,17 +3,13 @@ pipeline {
     label "lead-toolchain-skaffold"
   }
   environment {
-    SKAFFOLD_DEFAULT_REPO = 'docker.artifactory.liatr.io/liatrio'
+    SKAFFOLD_DEFAULT_REPO = 'artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio-dev'
   }
   stages {
     stage('Build') {
       steps {
-        script {
-          container('skaffold') {
-            docker.withRegistry("https://${SKAFFOLD_DEFAULT_REPO}", 'jenkins-credential-artifactory') {
-              sh "skaffold build -f .cache/skaffold.yaml"
-            }
-          }
+        container('skaffold') {
+          sh "skaffold build -f .cache/skaffold.yaml"
         }
       }
     }
