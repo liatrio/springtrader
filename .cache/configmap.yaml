@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: springtrader-cache
+  labels:
+    jenkins-jenkins-config: 'true'
+data:
+  jobs.yaml: '{"jobs":[{"script": "\n        folder(''liatrio'') {\n}\n        multibranchPipelineJob(''liatrio/springtrader'') {\n          factory {\n        workflowBranchProjectFactory {\n            scriptPath(''.cache/Jenkinsfile'')\n        }\n    }\n    triggers {\n            periodic(10)\n          }\n          branchSources {\n            git {\n              id(''http://github.com/liatrio/springtrader.git'')\n              remote(''https://github.com/liatrio/springtrader.git'')\n              includes(''solution1'')\n            }\n          }\n          orphanedItemStrategy {\n            discardOldItems {\n              numToKeep(20)\n            }\n          }\n        }"}]}'
