@@ -3,7 +3,7 @@ pipeline {
     label "lead-toolchain-skaffold"
   }
   environment {
-    SKAFFOLD_DEFAULT_REPO = 'artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio-dev'
+    SKAFFOLD_DEFAULT_REPO = 'artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio'
   }
   stages {
     stage('Build') {

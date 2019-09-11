@@ -7,14 +7,14 @@ build:
     docker:
       target: runner
       cacheFrom:
-        - docker.artifactory.liatr.io/liatrio/springtrader-builder:latest
-        - docker.artifactory.liatr.io/liatrio/springtrader-runner:latest
-  - image: sqlfdb 
+        - artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-builder:latest
+        - artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-runner:latest
+  - image: sqlfdb
     docker:
       target: sqlfdb
       cacheFrom:
-        - docker.artifactory.liatr.io/liatrio/springtrader-builder:latest
-        - docker.artifactory.liatr.io/liatrio/springtrader-runner:latest
+        - artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-builder:latest
+        - artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-runner:latest
   local: {}
 ### [build] 
 
