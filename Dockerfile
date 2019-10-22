@@ -68,7 +68,7 @@ COPY --from=builder /springtrader/dist/spring-nanotrader-web-1.0.1.BUILD-SNAPSHO
 
 WORKDIR /app
 
-ENTRYPOINT /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh run springtrader
+ENTRYPOINT ["/opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh", "run", "springtrader"]
 ### [runner] 
 
 ### [sqlfdb] 
