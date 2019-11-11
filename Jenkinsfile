@@ -77,7 +77,7 @@ pipeline {
     }
 
     // Note: Add prod stage here
-stage("Deploy to Staging") {
+  stage("Deploy to Production") {
       agent {
         label "lead-toolchain-skaffold"
       }
@@ -85,8 +85,8 @@ stage("Deploy to Staging") {
           branch 'master'
       }
       environment {
-        TILLER_NAMESPACE = "${env.stagingNamespace}"
-        ISTIO_DOMAIN   = "${env.stagingDomain}"
+        TILLER_NAMESPACE = "${env.productionNamespace}"
+        ISTIO_DOMAIN   = "${env.productionDomain}"
       }
       steps {
         notifyStageStart()
@@ -97,13 +97,14 @@ stage("Deploy to Staging") {
       }
       post {
         success {
-          notifyStageEnd([status: "Successfully deployed to staging:\nspringtrader.${env.stagingDomain}/spring-nanotrader-web/"])
+          notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionDomain}/spring-nanotrader-web/"])
         }
         failure {
           notifyStageEnd([result: "fail"])
         }
       }
     }
+
 
   }
   post {
