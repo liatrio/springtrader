@@ -93,7 +93,6 @@ pipeline {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
         
-      }
       post {
         success {
           notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionDomain}/spring-nanotrader-web/"])
