@@ -8,7 +8,7 @@ pipeline {
     }
 
     // Note: Add build stage here
-stage('Build') {
+  stage('Build') {
       agent {
         label "lead-toolchain-skaffold"
       }
@@ -31,7 +31,7 @@ stage('Build') {
     }
 
     // Note: Add deploy stage here
-stage("Deploy to Staging") {
+  stage("Deploy to Staging") {
       agent {
         label "lead-toolchain-skaffold"
       }
@@ -60,31 +60,19 @@ stage("Deploy to Staging") {
     }
 
     // Note: Add gating stage here
-stage("Deploy to Staging") {
-      agent {
-        label "lead-toolchain-skaffold"
-      }
+  stage ('Manual Ready Check') {
+      agent none
       when {
-          branch 'master'
+        branch 'master'
       }
-      environment {
-        TILLER_NAMESPACE = "${env.stagingNamespace}"
-        ISTIO_DOMAIN   = "${env.stagingDomain}"
+      options {
+        timeout(time: 30, unit: 'MINUTES')
+      }
+      input {
+        message 'Deploy to Production?'
       }
       steps {
-        notifyStageStart()
-        container('skaffold') {
-          unstash 'build'
-          sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
-        }
-      }
-      post {
-        success {
-          notifyStageEnd([status: "Successfully deployed to staging:\nspringtrader.${env.stagingDomain}/spring-nanotrader-web/"])
-        }
-        failure {
-          notifyStageEnd([result: "fail"])
-        }
+        echo "Deploying"
       }
     }
 
