@@ -60,7 +60,7 @@ pipeline {
     }
 
     // Note: Add gating stage here
-  stage ('Manual Ready Check') {
+    stage ('Manual Ready Check') {
       agent none
       when {
         branch 'master'
@@ -75,8 +75,9 @@ pipeline {
         echo "Deploying"
       }
     }
+
     // Note: Add prod stage here
-  stage("Deploy to Production") {
+    stage("Deploy to Production") {
       agent {
         label "lead-toolchain-skaffold"
       }
@@ -92,7 +93,8 @@ pipeline {
         container('skaffold') {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
-        
+        }
+      }
       post {
         success {
           notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionDomain}/spring-nanotrader-web/"])
@@ -102,7 +104,8 @@ pipeline {
         }
       }
     }
-   }
+
+  }
   post {
     success {
       echo "Pipeline Success"
