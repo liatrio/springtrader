@@ -8,7 +8,7 @@ pipeline {
     }
 
     // Note: Add build stage here
-  stage('Build') {
+    stage('Build') {
       agent {
         label "lead-toolchain-skaffold"
       }
@@ -31,7 +31,7 @@ pipeline {
     }
 
     // Note: Add deploy stage here
-  stage("Deploy to Staging") {
+    stage("Deploy to Staging") {
       agent {
         label "lead-toolchain-skaffold"
       }
@@ -75,7 +75,6 @@ pipeline {
         echo "Deploying"
       }
     }
-
     // Note: Add prod stage here
   stage("Deploy to Production") {
       agent {
@@ -93,7 +92,7 @@ pipeline {
         container('skaffold') {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
-        }
+        
       }
       post {
         success {
@@ -104,7 +103,6 @@ pipeline {
         }
       }
     }
-
 
   }
   post {
