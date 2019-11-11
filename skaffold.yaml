@@ -1,0 +1,37 @@
+apiVersion: skaffold/v1beta12
+kind: Config
+build:
+  artifacts:
+  - image: springtrader
+    docker:
+      target: runner
+      cacheFrom:
+        - artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-builder:latest
+        - artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-runner:latest
+  - image: sqlfdb
+    docker:
+      target: sqlfdb
+      cacheFrom:
+        - artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-builder:latest
+        - artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-runner:latest
+  local: {}
+deploy:
+  helm:
+    releases:
+      - name: springtrader 
+        chartPath: ./charts/springtrader
+        wait: true
+        values:
+          image: springtrader 
+          sqlfdb: sqlfdb 
+        setValueTemplates:
+          istioDomain: "{{.ISTIO_DOMAIN}}"
+profiles:
+- name: microk8s
+  activation:
+  - kubeContext: microk8s
+  patches:
+  - op: add
+    path: /deploy/helm/releases/0/setValues
+    value: 
+      storageClassName: microk8s-hostpath
