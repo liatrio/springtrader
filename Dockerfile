@@ -11,8 +11,14 @@ RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-
     
 # Build the application
 WORKDIR /app
+
+# Separate dependency layer
+COPY build.gradle gradle.properties settings.gradle gradlew ./
+COPY .wrapper/ ./.wrapper
+RUN ./gradlew build
+
 COPY . .
-RUN ./gradlew clean build release
+RUN ./gradlew build release
 
 # Copy artifacts to server
 WORKDIR /opt/vmware/vfabric-tc-server-standard
