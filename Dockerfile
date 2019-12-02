@@ -1,10 +1,5 @@
 FROM centos:centos6 
 
-# Build the application
-WORKDIR /app
-COPY . .
-RUN ./gradlew clean build release
-
 # Accept VMware certificate
 RUN mkdir -p /etc/vmware/vfabric/ && \
     echo 'I_ACCEPT_EULA_LOCATED_AT=http://www.vmware.com/download/eula/vfabric_app-platform_eula.html' \
@@ -14,6 +9,11 @@ RUN mkdir -p /etc/vmware/vfabric/ && \
 RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-1.noarch.rpm && \
     yum install wget unzip java-1.7.0-openjdk-devel vfabric-tc-server-standard -y
     
+# Build the application
+WORKDIR /app
+COPY . .
+RUN ./gradlew clean build release
+
 # Copy artifacts to server
 WORKDIR /opt/vmware/vfabric-tc-server-standard
 RUN ./tcruntime-instance.sh create springtrader -t springtrader -f templates/springtrader/sqlfire.properties
