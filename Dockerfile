@@ -19,6 +19,7 @@ COPY templates templates
 COPY tools tools
 
 RUN ./gradlew clean build release
+## Builder stage end
 ### [builder] 
 
 ### [vfabric] 
@@ -34,6 +35,7 @@ RUN mkdir -p /etc/vmware/vfabric/ && \
 # Install vFabric software
 RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-1.noarch.rpm && \
     yum install wget unzip java-1.7.0-openjdk-devel vfabric-tc-server-standard -y
+## vFabric base stage end
 ### [vfabric] 
 
 ### [runner] 
@@ -69,10 +71,12 @@ COPY --from=builder /springtrader/dist/spring-nanotrader-web-1.0.1.BUILD-SNAPSHO
 WORKDIR /app
 
 ENTRYPOINT ["/opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh", "run", "springtrader"]
+## vFabric appserver stage end
 ### [runner] 
 
 ### [sqlfdb] 
 ## SQLFire stage
 FROM vfabric as sqlfdb
 RUN yum install vfabric-sqlfire -y
+## SQLFire stage end
 ### [sqlfdb] 
