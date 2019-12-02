@@ -17,7 +17,16 @@ COPY build.gradle gradle.properties settings.gradle gradlew ./
 COPY .wrapper/ ./.wrapper
 RUN ./gradlew build
 
-COPY . .
+COPY docs docs
+COPY spring-nanotrader-asynch-services spring-nanotrader-asynch-services
+COPY spring-nanotrader-chaos spring-nanotrader-chaos
+COPY spring-nanotrader-data spring-nanotrader-data
+COPY spring-nanotrader-service-support spring-nanotrader-service-support
+COPY spring-nanotrader-services spring-nanotrader-services
+COPY spring-nanotrader-web spring-nanotrader-web
+COPY src src
+COPY templates templates
+COPY tools tools
 RUN ./gradlew build release
 
 # Copy artifacts to server
