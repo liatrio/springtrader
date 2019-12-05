@@ -37,13 +37,13 @@ spec:
           value: '/usr/bin'
         livenessProbe:
           httpGet:
-            path: /spring-nanotrader-web/
+            path: /spring-nanotrader-services/api/marketSummary
             port: 8080
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
-            path: /spring-nanotrader-web/
+            path: /spring-nanotrader-services/api/marketSummary
             port: 8080
           initialDelaySeconds: 120
           timeoutSeconds: 5
