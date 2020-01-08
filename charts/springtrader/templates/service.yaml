@@ -6,7 +6,7 @@ spec:
  selector:
    app: springtrader
  ports:
- - name: frontend
+ - name: http
    port: 8080
    targetPort: 8080
  - name: epmd
