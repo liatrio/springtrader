@@ -6,19 +6,19 @@ spec:
  selector:
    app: springtrader
  ports:
- - name: http
+ - name: http-frontend
    port: 8080
    targetPort: 8080
- - name: epmd
+ - name: tcp-epmd
    port: 4369
    targetPort: 4369
- - name: node
+ - name: tcp-node
    port: 5672
    targetPort: 5672
- - name: dist
+ - name: tcp-dist
    port: 25672
    targetPort: 25672
- - name: management
+ - name: tcp-management
    port: 15672
    targetPort: 15672
  type: ClusterIP
