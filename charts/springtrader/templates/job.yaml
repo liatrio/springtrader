@@ -3,6 +3,7 @@ kind: Job
 metadata:
   name: generate-schema
 spec:
+  backoffLimit: 10
   template:
     metadata:
       annotations:
@@ -33,6 +34,7 @@ kind: Job
 metadata:
   name: generate-data
 spec:
+  backoffLimit: 10
   template:
     metadata:
       annotations:
