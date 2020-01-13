@@ -20,8 +20,18 @@ spec:
         image: bitnami/kubectl:1.15
         args: ['wait','--for=condition=ready','pod/nanodbserver-0','--timeout=300s']
       - name: wait-for-schema
-        image: bitnami/kubectl:1.15
-        args: ['wait','--for=condition=complete','job/generate-schema','--timeout=300s']
+        image: {{ .Values.image }}
+        command: ['sh','-c','./checkSqlfSchema']
+        env:
+        - name: GROOVY_HOME
+          value: '/usr/bin'
+        resources:
+          requests:
+            memory: "192Mi"
+            cpu: "32m"
+          limits:
+            memory: "384Mi"
+            cpu: "256m"
       containers:
       - name: springtrader
         image: {{ .Values.image }}
