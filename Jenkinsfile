@@ -26,13 +26,13 @@ pipeline {
       }
       environment {
         TILLER_NAMESPACE = "${env.stagingNamespace}"
-        ISTIO_DOMAIN   = "${env.stagingDomain}"
+        ISTIO_DOMAIN   = "${env.appDomain}"
       }
       steps {
         container('skaffold') {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
-          stageMessage "Successfully deployed to staging:\nspringtrader.${env.stagingDomain}/spring-nanotrader-web/"
+          stageMessage "Successfully deployed to staging:\nspringtrader-${env.stagingNamespace}.${env.appDomain}/spring-nanotrader-web/"
         }
       }
     }
@@ -66,13 +66,13 @@ pipeline {
       }
       environment {
         TILLER_NAMESPACE = "${env.productionNamespace}"
-        ISTIO_DOMAIN   = "${env.productionDomain}"
+        ISTIO_DOMAIN   = "${env.appDomain}"
       }
       steps {
         container('skaffold') {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
-          stageMessage "Successfully deployed to production:\nspringtrader.${env.productionDomain}/spring-nanotrader-web/"
+          stageMessage "Successfully deployed to production:\nspringtrader-${env.productionNamespace}.${env.appDomain}/spring-nanotrader-web/"
         }
       }
     }
