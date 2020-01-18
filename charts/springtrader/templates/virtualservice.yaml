@@ -5,7 +5,7 @@ metadata:
   name: "{{ .Chart.Name }}"
 spec:
   hosts:
-  - {{ .Chart.Name }}-{{ .Release.Namespace }}.{{ .Values.istioDomain }}
+  - {{ .Chart.Name }}.{{ .Values.productName }}.{{ .Values.istioDomain }}
   gateways:
   - "istio-system/app-gateway"
   http:
