@@ -30,6 +30,7 @@ deploy:
           sqlfdb: sqlfdb 
         setValueTemplates:
           istioDomain: "{{.ISTIO_DOMAIN}}"
+          productName: "{{.PRODUCT_NAME}}"
 profiles:
 - name: microk8s
   activation:
