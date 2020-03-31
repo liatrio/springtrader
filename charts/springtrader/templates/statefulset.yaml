@@ -42,8 +42,6 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "256m"
-        strategy: 
-          type: recreate
         volumeMounts:
         - mountPath: /sqlf-data
           name: sqlf-data
