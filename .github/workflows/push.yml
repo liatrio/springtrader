@@ -1,0 +1,26 @@
+name: push
+on: 
+- push
+- pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - id: gitextra
+      uses: liatrio/github-actions/git-extra@master
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        role-duration-seconds: 1200
+    - id: ecr
+      uses: liatrio/github-actions/ecr@master
+    - id: skaffold
+      uses: liatrio/github-actions/skaffold-build@ENG-1728
+      with:
+        default_repo: ${{ steps.ecr.outputs.registry }}
+        skaffold_file_path: ./.cache/skaffold.yaml
