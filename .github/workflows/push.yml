@@ -20,7 +20,7 @@ jobs:
     - id: ecr
       uses: liatrio/github-actions/ecr@master
     - id: skaffold
-      uses: liatrio/github-actions/skaffold-build@ENG-1728
+      uses: liatrio/github-actions/skaffold-build@master
       with:
         default_repo: ${{ steps.ecr.outputs.registry }}
         skaffold_file_path: ./.cache/skaffold.yaml
