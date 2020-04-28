@@ -38,6 +38,6 @@ profiles:
   patches:
   - op: add
     path: /deploy/helm/releases/0/setValues
-    value: 
+    value:
       storageClassName: standard
-### [deploy] 
+### [deploy]
