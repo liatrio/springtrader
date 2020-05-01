@@ -16,9 +16,14 @@ spec:
     spec:
       containers:
       - name: springtrader-cache-refresh
-        image: artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel/builder-image-skaffold:v1.1.1-1-g6b3c49e
+        image: 489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:v2.0.2-28-g0fadddc
         command: ["/bin/sh"]
-        args: ["-c", "while true; do docker pull artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-builder:latest; docker pull artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-runner:latest; sleep 600; done"]
+        args: ["-c", "while true; do docker pull $CACHE_IMAGE_REPO/springtrader-builder:latest; docker pull $CACHE_IMAGE_REPO/springtrader-runner:latest; sleep 600; done"]
+        env:
+        - name: CACHE_IMAGE_REPO
+          value: "harbor.toolchain.lead.prod.liatr.io/liatrio"
+        - name: CONTAINER_IMAGE_VERSION
+          value: "v2.0.2-28-g0fadddc"
         volumeMounts:
         - mountPath: /var/run/docker.sock
           name: docker
