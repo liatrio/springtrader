@@ -22,8 +22,6 @@ spec:
         env:
         - name: CACHE_IMAGE_REPO
           value: "harbor.toolchain.lead.prod.liatr.io/liatrio"
-        - name: CONTAINER_IMAGE_VERSION
-          value: "v2.0.2-28-g0fadddc"
         volumeMounts:
         - mountPath: /var/run/docker.sock
           name: docker
