@@ -26,12 +26,13 @@ allprojects {
 	
 	repositories {
 		flatDir dirs: ["${gradle.gradleHomeDir}/lib"]
-                maven { url  'http://repo.springsource.org' }
-		maven { url  'http://maven.springframework.org/release' }
-		maven { url  'http://repo.springsource.org/libs-milestone' }
-		maven { url  'http://spring-roo-repository.springsource.org/release' }
+		maven { url  'https://repo.springsource.org' }
+		maven { url  'https://maven.springframework.org/release' }
+		maven { url  'https://repo.springsource.org/libs-milestone' }
+		maven { url  'https://spring-roo-repository.springsource.org/release' }
 		mavenCentral()
-		maven { url 'http://maven.springframework.org/snapshot' }
+		maven { url 'https://maven.springframework.org/snapshot' }
+		maven { url 'https://repo.spring.io/plugins-release/' }
 	}
 }
 
