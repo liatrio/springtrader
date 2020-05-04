@@ -2,5 +2,3 @@ To create this Jenkins job, publish this configmap to your product toolchain nam
 `kubectl -n {NAMESPACE} apply -f configmap.yaml`
 i.e. `kubectl -n flywheel-toolchain apply -f configmap.yaml`
 
-To ensure the cache image is kept up to date deploy the springtrader-cache-refresh daemonset.
-`kubectl -n toolchain apply -f cache-refresh-daemonset.yaml`
