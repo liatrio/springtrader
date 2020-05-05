@@ -55,10 +55,11 @@ WORKDIR /app
 # Add sqlfire client to data generation dependencies
 COPY --from=builder /springtrader/dist/DataGenerator.zip .
 RUN unzip DataGenerator.zip
+COPY lib/sqlfireclient-1.0.3.jar libs/
 
 # Copy template artifact to tc-server
 COPY --from=builder /springtrader/templates/springtrader /opt/vmware/vfabric-tc-server-standard/templates/springtrader
-COPY lib/sqlfireclient-1.0.3.jar /opt/vmware/vfabric-tc-server-standard/templates/springtrader/lib/sqlfireclient.jar
+RUN cp libs/sqlfireclient-1.0.3.jar /opt/vmware/vfabric-tc-server-standard/templates/springtrader/lib/sqlfireclient.jar
 
 # Copy artifacts to server
 WORKDIR /opt/vmware/vfabric-tc-server-standard
