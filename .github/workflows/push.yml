@@ -12,7 +12,7 @@ jobs:
       uses: liatrio/github-actions/git-extra@master
     - uses: azure/docker-login@v1
       with:
-        login-server: harbor.toolchain.lead.prod.liatr.io
+        login-server: https://harbor.toolchain.lead.prod.liatr.io/liatrio
         username: ${{ secrets.HARBOR_USERNAME }}
         password: ${{ secrets.HARBOR_PASSWORD }}
     - id: skaffold
