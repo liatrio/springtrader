@@ -3,12 +3,12 @@ kind: Config
 build:
   artifacts:
   - image: springtrader-builder
-    context: .
+    context: ./test
     docker:
       target: builder
       noCache: true
   - image: springtrader-runner
-    context: .
+    context: ./test
     docker:
       target: runner
   tagPolicy:
