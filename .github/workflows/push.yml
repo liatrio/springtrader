@@ -11,7 +11,7 @@ jobs:
     - id: gitextra
       uses: liatrio/github-actions/git-extra@master
     - id: skaffold
-      uses: liatrio/github-actions/skaffold-build@master
+      uses: liatrio/github-actions/skaffold-build@bump-skaffold
       with:
         default_repo: harbor.toolchain.lead.prod.liatr.io/liatrio
         skaffold_file_path: ./.cache/skaffold.yaml
