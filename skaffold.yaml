@@ -7,14 +7,14 @@ build:
     docker:
       target: runner
       cacheFrom:
-        - harbor.toolchain.lead.prod.liatr.io/liatrio/springtrader-builder:latest
-        - harbor.toolchain.lead.prod.liatr.io/liatrio/springtrader-runner:latest
+        - harbor.toolchain.lead.prod.liatr.io/flywheel/springtrader-builder:latest
+        - harbor.toolchain.lead.prod.liatr.io/flywheel/springtrader-runner:latest
   - image: sqlfdb
     docker:
       target: sqlfdb
       cacheFrom:
-        - harbor.toolchain.lead.prod.liatr.io/liatrio/springtrader-builder:latest
-        - harbor.toolchain.lead.prod.liatr.io/liatrio/springtrader-runner:latest
+        - harbor.toolchain.lead.prod.liatr.io/flywheel/springtrader-builder:latest
+        - harbor.toolchain.lead.prod.liatr.io/flywheel/springtrader-runner:latest
   local: {}
 ### [build]
 
