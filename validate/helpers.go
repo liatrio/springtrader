@@ -34,51 +34,61 @@ func treeValue(values interface{}, path []interface{}) (string, error) {
 	}
 }
 
-type treeCompareError struct {
-  Path []string
-}
-
-func (err *treeCompareError) Error() (string) {
-
-}
-
-func (err *treeCompareError) Add(path string) {
-	err.Path.append(path)
-}
-
-func treeCompare(actual interface{}, expected interface{}) (treeCompareError) {
-	// if reflect.TypeOf(actual) != reflect.TypeOf(expected) {
-	// 	return fmt.Errorf("actual not same type as expected")
-	// }
-
+func treeCompare(actual interface{}, expected interface{}) error {
 	switch expectedType := expected.(type) {
 	case map[string]interface{}:
 		if actualMap, ok := actual.(map[string]interface{}); !ok {
-			return fmt.Errorf("actual not object(map)")
+			return fmt.Errorf("actual value is of type %T, expected %T", actual, expected)
 		}
-		for key, value := range expectedType {
+		for key, value := range expected {
 			if v, ok := actualMap[key]; ok {
-				err := treeCompare(actualMap[key], expectedMap[key])
+				err := treeCompare(v, expected[key])
 				if err != nil {
-					err.Add(key)
-					return err;
+					return err
 				}
 			} else {
-
+				return fmt.Errorf("actual map did not contain key %s", key)
 			}
 		}
-	}
-
-	switch reflect.TypeOf(actual).Kind() {
-	case reflect.Map:
-		expected.(map[string]interface{}) range
-	case reflect.Slice:
-	case reflect.String:
-		if actual.(string) == expected.(string) {
-			return nil
-		} else {
-			return fmt.Errorf("%s does not equal %s", actual, expected)
+		return nil
+	case []interface{}:
+		if actualSlice, ok := actual.([]interface{}); !ok {
+			return fmt.Errorf("actual value is of type %T, expected %T", actual, expected)
 		}
-	case reflect.Bool:
+		for key, value := range expected {
+			if v, ok := actualSlice[key]; ok {
+				err := treeCompare(v, expected[key])
+				if err != nil {
+					return err
+				}
+			} else {
+				return fmt.Errorf("actual slice did not contain key %d", key)
+			}
+		}
+		return nil
+	case string:
+		if actualString, ok := actual.(string); !ok {
+			return fmt.Errorf("actual value is of type %T, expected %T", actual, expected)
+		}
+		if actualString != string(expected) {
+			return fmt.Errorf("actual value of %s does not match expected string of %s", actualString, expected)
+		}
+		return nil
+	case int:
+		if actualInt, ok := actual.(int); !ok {
+			return fmt.Errorf("actual value is of type %T, expected %T", actual, expected)
+		}
+		if actualInt != bool(expected) {
+			return fmt.Errorf("actual value of %d does not match expected integer of %d", actualInt, expected)
+		}
+		return nil
+	case bool:
+		if actualBool, ok := actual.(bool); !ok {
+			return fmt.Errorf("actual value is of type %T, expected %T", actual, expected)
+		}
+		if actualBool != bool(expected) {
+			return fmt.Errorf("actual value of %v does not match expected boolean of %v", actualString, expected)
+		}
+		return nil
 	}
 }

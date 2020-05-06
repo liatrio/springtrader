@@ -38,10 +38,10 @@ var _ = Describe("Lab 1 Containers", func() {
 
 			skaffoldActualFile, err := ioutil.ReadFile("../skaffold.yaml")
 			err = yaml.Unmarshal(skaffoldActualFile)
-			
+
 			err = treeCompare(skaffoldActual, skaffoldExpected)
-			Expect(err).To(Equal(nil)), optionalDescription ...interface{}), extra ...interface{})
-			
+			Expect(err).To(Equal(nil))
+
 			var skaffold interface{}
 			skaffoldFile, err := ioutil.ReadFile("../skaffold.yaml")
 			if err != nil {
