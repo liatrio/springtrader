@@ -3,4 +3,5 @@ kind: Config
 build:
   artifacts:
   - image: springtrader
+  - image: sqlfdb
   local: {}

@@ -1,9 +1,10 @@
 package validate
 
 import (
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+
+	"gopkg.in/yaml.v2"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -34,13 +35,13 @@ var _ = Describe("Lab 1 Containers", func() {
 			var skaffoldExpected interface{}
 
 			skaffoldExpectedFile, err := ioutil.ReadFile("./solution-data/lab01step03-skaffold.yaml")
-			err = yaml.Unmarshal(skaffoldExpectedFile)
+			err = yaml.Unmarshal(skaffoldExpectedFile, &skaffoldExpected)
 
 			skaffoldActualFile, err := ioutil.ReadFile("../skaffold.yaml")
-			err = yaml.Unmarshal(skaffoldActualFile)
+			err = yaml.Unmarshal(skaffoldActualFile, &skaffoldActual)
 
 			err = treeCompare(skaffoldActual, skaffoldExpected)
-			Expect(err).To(Equal(nil))
+			Expect(err).To(BeNil())
 
 			var skaffold interface{}
 			skaffoldFile, err := ioutil.ReadFile("../skaffold.yaml")
