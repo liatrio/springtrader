@@ -1,16 +1,13 @@
 package validate
 
 import (
-  "io/ioutil"
-  "fmt"
-  "os"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"log"
 
-  "gopkg.in/yaml.v2"
-
-  . "github.com/onsi/ginkgo"
-  . "github.com/onsi/gomega"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
-
 
 var _ = Describe("Lab 1 Containers", func() {
 	var failMessage string
@@ -52,29 +49,29 @@ var _ = Describe("Lab 1 Containers", func() {
 		})
 	})
 
-    Context("Step 5", func() {
+	Context("Step 5", func() {
 		It("should have a deployment.yaml file", func() {
 			failMessage = "deployment.yaml Doesn't Exist or is in the wrong location\n"
 			Expect(fileExists("../deployment.yaml")).To(Succeed(), failMessage)
 		})
 
-        It("should have a statefulset.yaml file", func() {
+		It("should have a statefulset.yaml file", func() {
 			failMessage = "statefulset.yaml Doesn't Exist or is in the wrong location\n"
 			Expect(fileExists("../statefulset.yaml")).To(Succeed(), failMessage)
 		})
 
-        It("should have a service.yaml file", func() {
+		It("should have a service.yaml file", func() {
 			failMessage = "service.yaml Doesn't Exist or is in the wrong location\n"
 			Expect(fileExists("../service.yaml")).To(Succeed(), failMessage)
 		})
 
-        It("should have a job.yaml file", func() {
+		It("should have a job.yaml file", func() {
 			failMessage = "job.yaml Doesn't Exist or is in the wrong location\n"
 			Expect(fileExists("../job.yaml")).To(Succeed(), failMessage)
 		})
-    })
+	})
 
-    Context("Step 11", func() {
+	Context("Step 11", func() {
 		It("should have deploy and policy sections in the skaffold.yaml file", func() {
 			var skaffold interface{}
 			skaffoldFile, err := ioutil.ReadFile("../skaffold.yaml")
@@ -85,14 +82,13 @@ var _ = Describe("Lab 1 Containers", func() {
 			err = yaml.Unmarshal(skaffoldFile, &skaffold)
 			Expect(err).ToNot(HaveOccurred())
 
-            failMessage = "Incorrect deploy section in skaffold.yaml\n"
+			failMessage = "Incorrect deploy section in skaffold.yaml\n"
 			Expect(treeValue(skaffold, []interface{}{"deploy", "helm", "releases", 0, "name"})).To(Equal("springtrader"), failMessage)
 
-            failMessage = "Incorrect profiles section in skaffold.yaml\n"
+			failMessage = "Incorrect profiles section in skaffold.yaml\n"
 			Expect(treeValue(skaffold, []interface{}{"profiles", 0, "name"})).To(Equal("kind"), failMessage)
 		})
 	})
-
 
 	AfterEach(func() {
 		log.Printf("%v\n", CurrentGinkgoTestDescription())

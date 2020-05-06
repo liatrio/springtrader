@@ -1,8 +1,8 @@
 package validate
 
 import (
-	"os"
 	"fmt"
+	"os"
 )
 
 func fileExists(filename string) (err error) {
