@@ -2,36 +2,11 @@ package validate
 
 import (
 	"fmt"
-	"os"
+
+	"github.com/onsi/gomega/types"
 )
 
-func fileExists(filename string) (err error) {
-	_, err = os.Stat(filename)
-	return err
-}
-
-func treeValue(values interface{}, path []interface{}) (string, error) {
-	if len(path) == 0 {
-		return values.(string), nil
-	}
-	switch step := path[0].(type) {
-	case string:
-		v, ok := values.(map[interface{}]interface{})
-		if !ok {
-			return "", fmt.Errorf("%v is not a map in %v", step, v)
-		}
-		return treeValue(v[step], path[1:])
-	case int:
-		v, ok := values.([]interface{})
-		if !ok {
-			return "", fmt.Errorf("%v is not a slice in %v", step, v)
-		}
-		return treeValue(v[step], path[1:])
-	default:
-		return "", fmt.Errorf("cannot navigate path step %v of type %t", step, step)
-	}
-}
-
+/*
 type treeCompareError struct {
 	Path []string
 }
@@ -52,74 +27,96 @@ func (err *treeCompareError) Errorf(message string) *treeCompareError {
 func (err *treeCompareError) Add(path string) {
 	err.Path = append(err.Path, path)
 }
+*/
 
-func treeCompare(actual interface{}, expected interface{}) error {
+func treeCompare(actual interface{}, expected interface{}) (bool, error) {
 	switch expectedType := expected.(type) {
-	case map[string]interface{}:
-		actualMap, ok := actual.(map[string]interface{})
+	case map[interface{}]interface{}:
+		actualMap, ok := actual.(map[interface{}]interface{})
 		if !ok {
-			/*
-				err := new *treeCompareError
-				return new *treeCompareError{ err.Errorf(fmt.Sprintf("actual value is of type %T, expected %T", actualMap, expectedType))}
-			*/
-			return fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
+			return false, fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
 		}
-		for key := range expectedType {
-			if actualMapValue, ok := actualMap[key]; ok {
-				err := treeCompare(actualMapValue, expectedType[key])
+		for key := range actualMap {
+			if expectedTypeValue, ok := expectedType[key.(string)]; ok {
+				_, err := treeCompare(actualMap[key.(string)], expectedTypeValue)
 				if err != nil {
-					//err.Add(key)
-					return err
+					return false, err
 				}
 			} else {
-				//return fmt.Errorf("actual map did not contain key %s", key)
-				return fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
+				return false, fmt.Errorf("actual value %s of type %T does not match up with expected value %s of type %T", actualMap[key.(string)], actualMap, expectedTypeValue, expectedType)
 			}
 		}
-		return nil
+		return true, nil
 	case []interface{}:
 		actualSlice, ok := actual.([]interface{})
 		if !ok {
-			return fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
+			return false, fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
 		}
-		for key := range expectedType {
-			if actualSliceValue := actualSlice[key]; ok {
-				err := treeCompare(actualSliceValue, expectedType[key])
+		for key := range actualSlice {
+			if expectedTypeValue := expectedType[key]; ok {
+				_, err := treeCompare(actualSlice[key], expectedTypeValue)
 				if err != nil {
-					return err
+					return false, err
 				}
 			} else {
-				return fmt.Errorf("actual slice did not contain key %d", key)
+				return false, fmt.Errorf("actual value %s of type %T does not match up with expected value %s of type %T", actualSlice[key], actualSlice, expectedTypeValue, expectedType)
 			}
 		}
-		return nil
+		return true, nil
 	case string:
 		actualString, ok := actual.(string)
 		if !ok {
-			return fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
+			return false, fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
 		}
 		if actualString != expectedType {
-			return fmt.Errorf("actual value of %s does not match expectedType string of %s", actualString, expectedType)
+			return false, fmt.Errorf("actual value of %s does not match expectedType string of %s", actualString, expectedType)
 		}
-		return nil
+		return true, nil
 	case int:
 		actualInt, ok := actual.(int)
 		if !ok {
-			return fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
+			return false, fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
 		}
 		if actualInt != expectedType {
-			return fmt.Errorf("actual value of %d does not match expectedType integer of %d", actualInt, expectedType)
+			return false, fmt.Errorf("actual value of %d does not match expectedType integer of %d", actualInt, expectedType)
 		}
-		return nil
+		return true, nil
 	case bool:
 		actualBool, ok := actual.(bool)
 		if !ok {
-			return fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
+			return false, fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
 		}
 		if actualBool != expectedType {
-			return fmt.Errorf("actual value of %v does not match expectedType boolean of %v", actualBool, expectedType)
+			return false, fmt.Errorf("actual value of %v does not match expectedType boolean of %v", actualBool, expectedType)
 		}
-		return nil
+		return true, nil
+	default:
+		return false, fmt.Errorf("expectedType of %T did not match any expected types", expectedType)
 	}
-	return nil
+}
+
+func ValidateYamlObject(expected interface{}) types.GomegaMatcher {
+	return &validateYaml{
+		expected: expected,
+	}
+}
+
+type validateYaml struct {
+	expected interface{}
+}
+
+func (matcher *validateYaml) Match(actual interface{}) (success bool, err error) {
+	success, err = treeCompare(actual, matcher.expected)
+	if success == false {
+		return success, err
+	}
+	return success, nil
+}
+
+func (matcher *validateYaml) FailureMessage(actual interface{}) (message string) {
+	return fmt.Sprintf("Expected\n\t%#v\nto contain the JSON representation of\n\t%#v", actual, matcher.expected)
+}
+
+func (matcher *validateYaml) NegatedFailureMessage(actual interface{}) (message string) {
+	return fmt.Sprintf("Expected\n\t%#v\nnot to contain the JSON representation of\n\t%#v", actual, matcher.expected)
 }
