@@ -1,6 +1,7 @@
 package validate
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -20,138 +21,108 @@ var _ = Describe("Lab 1 Containers", func() {
 	Context("Step 2", func() {
 		It("should have a Dockerfile", func() {
 			failMessage = "Dockerfile Doesn't Exist or is in the wrong location\n"
-			Expect(fileExists("../Dockerfile")).To(Succeed(), failMessage)
+			Expect("../Dockerfile").To(BeAnExistingFile(), failMessage)
 		})
 	})
 
 	Context("Step 3", func() {
 		It("should have a skaffold.yaml file", func() {
 			failMessage = "skaffold.yaml Doesn't Exist or is in the wrong location\n"
-			Expect(fileExists("../skaffold.yaml")).To(Succeed(), failMessage)
+			Expect("../skaffold.yaml").To(BeAnExistingFile(), failMessage)
 		})
 
-		It("should have a valid skaffold configuration", func() {
-			var skaffoldFile interface{}
-			var skaffoldExpected interface{}
+		It("should have valid versions in skaffold.yaml", func() {
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-version.yaml")
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+		})
 
-			skaffoldExpectedFile, err := ioutil.ReadFile("./solution-data/lab01step03/skaffold.yaml")
-			err = yaml.Unmarshal(skaffoldExpectedFile, &skaffoldExpected)
-
-            skaffoldFile, err = ioutil.ReadFile("../skaffold.yaml")
-			if err != nil {
-				Skip("skaffold.yaml not found")
-			}
-			err = treeCompare(skaffoldFile, skaffoldExpected)
-			Expect(err).To(BeNil())
+		It("should have valid build and local sections in skaffold.yaml", func() {
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-build.yaml")
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 	})
 
-	Context("Step 5", func() {
+	Context("Step 6", func() {
 		It("should have a deployment.yaml file", func() {
 			failMessage = "deployment.yaml Doesn't Exist or is in the wrong location\n"
-			Expect(fileExists("../charts/springtrader/templates/deployment.yaml")).To(Succeed(), failMessage)
+			Expect("../charts/springtrader/templates/deployment.yaml").To(BeAnExistingFile(), failMessage)
 		})
+		/*
+			It("should have a valid deployment.yaml configuration", func() {
+				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/deployment.yaml")
+				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/deployment.yaml")
+				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			})
+		*/
+	})
 
-        It("should have a valid deployment.yaml file", func() {
-            failMessage = "deployment.yaml has incorrect contents\n"
-            var deploymentFile interface{}
-			var deploymentExpected interface{}
-
-			deploymentExpectedFile, err := ioutil.ReadFile("./solution-data/lab01step05/deployment.yaml")
-			err = yaml.Unmarshal(deploymentExpectedFile, &deploymentExpected)
-			Expect(err).ToNot(HaveOccurred())
-
-            deploymentFile, err = ioutil.ReadFile("../charts/springtrader/templates/deployment.yaml")
-			if err != nil {
-				Skip("deployment.yaml not found")
-			}
-			err = treeCompare(deploymentFile, deploymentExpected)
-			Expect(err).ToNot(HaveOccurred())
-        })
-
+	Context("Step 7", func() {
 		It("should have a statefulset.yaml file", func() {
 			failMessage = "statefulset.yaml Doesn't Exist or is in the wrong location\n"
-			Expect(fileExists("../charts/springtrader/templates/statefulset.yaml")).To(Succeed(), failMessage)
+			Expect("../charts/springtrader/templates/statefulset.yaml").To(BeAnExistingFile(), failMessage)
 		})
+		/*
+			It("should have a valid statefulset.yaml configuration", func() {
+				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/statefulset.yaml")
+				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/statefulset.yaml")
+				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			})
+		*/
+	})
 
-        It("should have a valid statefulset.yaml file", func() {
-            failMessage = "statefulset.yaml has incorrect contents\n"
-            var statefulsetFile interface{}
-			var statefulsetExpected interface{}
-
-			statefulsetExpectedFile, err := ioutil.ReadFile("./solution-data/lab01step05/statefulset.yaml")
-			err = yaml.Unmarshal(statefulsetExpectedFile, &statefulsetExpected)
-			Expect(err).ToNot(HaveOccurred())
-
-            statefulsetFile, err = ioutil.ReadFile("../charts/springtrader/templates/statefulset.yaml")
-			if err != nil {
-				Skip("statefulset.yaml not found")
-			}
-			err = treeCompare(statefulsetFile, statefulsetExpected)
-			Expect(err).ToNot(HaveOccurred())
-        })
-
+	Context("Step 8", func() {
 		It("should have a service.yaml file", func() {
 			failMessage = "service.yaml Doesn't Exist or is in the wrong location\n"
-			Expect(fileExists("../charts/springtrader/templates/service.yaml")).To(Succeed(), failMessage)
+			Expect("../charts/springtrader/templates/service.yaml").To(BeAnExistingFile(), failMessage)
 		})
+		/*
+			It("should have a valid service.yaml configuration", func() {
+				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/service.yaml")
+				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/service.yaml")
+				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			})
+		*/
+	})
 
-        It("should have a valid service.yaml file", func() {
-            failMessage = "service.yaml has incorrect contents\n"
-            var serviceFile interface{}
-			var serviceExpected interface{}
-
-			serviceExpectedFile, err := ioutil.ReadFile("./solution-data/lab01step05/service.yaml")
-			err = yaml.Unmarshal(serviceExpectedFile, &serviceExpected)
-			Expect(err).ToNot(HaveOccurred())
-
-            serviceFile, err = ioutil.ReadFile("../charts/springtrader/templates/service.yaml")
-			if err != nil {
-				Skip("service.yaml not found")
-			}
-			err = treeCompare(serviceFile, serviceExpected)
-			Expect(err).ToNot(HaveOccurred())
-        })
-
+	Context("Step 9", func() {
 		It("should have a job.yaml file", func() {
 			failMessage = "job.yaml Doesn't Exist or is in the wrong location\n"
-			Expect(fileExists("../charts/springtrader/templates/job.yaml")).To(Succeed(), failMessage)
+			Expect("../charts/springtrader/templates/job.yaml").To(BeAnExistingFile(), failMessage)
 		})
-
-        It("should have a valid job.yaml file", func() {
-            failMessage = "job.yaml has incorrect contents\n"
-            var jobFile interface{}
-			var jobExpected interface{}
-
-			jobExpectedFile, err := ioutil.ReadFile("./solution-data/lab01step05/job.yaml")
-			err = yaml.Unmarshal(jobExpectedFile, &jobExpected)
-			Expect(err).ToNot(HaveOccurred())
-
-            jobFile, err = ioutil.ReadFile("../charts/springtrader/templates/job.yaml")
-			if err != nil {
-				Skip("job.yaml not found")
-			}
-			err = treeCompare(jobFile, jobExpected)
-			Expect(err).ToNot(HaveOccurred())
-        })
+		/*
+			It("should have a valid job.yaml configuration", func() {
+				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/job.yaml")
+				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/job.yaml")
+				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			})
+		*/
 	})
 
 	Context("Step 11", func() {
-		It("should have deploy and policy sections in the skaffold.yaml file", func() {
-			var skaffold interface{}
-			skaffoldFile, err := ioutil.ReadFile("../skaffold.yaml")
-			if err != nil {
-				Skip("skaffold.yaml not found")
-			}
+		It("skaffold file should still have valid versions", func() {
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-version.yaml")
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+		})
 
-			err = yaml.Unmarshal(skaffoldFile, &skaffold)
-			Expect(err).ToNot(HaveOccurred())
+		It("should still have valid build and local sections", func() {
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-build.yaml")
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+		})
 
-			failMessage = "Incorrect deploy section in skaffold.yaml\n"
-			Expect(treeValue(skaffold, []interface{}{"deploy", "helm", "releases", 0, "name"})).To(Equal("springtrader"), failMessage)
+		It("skaffold file should have a deploy section", func() {
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step11/skaffold-deploy.yaml")
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+		})
 
-			failMessage = "Incorrect profiles section in skaffold.yaml\n"
-			Expect(treeValue(skaffold, []interface{}{"profiles", 0, "name"})).To(Equal("kind"), failMessage)
+		It("skaffold file should have a profile section", func() {
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step11/skaffold-profiles.yaml")
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 	})
 
@@ -162,3 +133,14 @@ var _ = Describe("Lab 1 Containers", func() {
 		}
 	})
 })
+
+func expectYamlToParse(path string) interface{} {
+	var output interface{}
+	file, err := ioutil.ReadFile(path)
+	failMessage := fmt.Sprintf("File at the path, %s, cannot be found. File may be in wrong location or misnamed.\n", path)
+	Expect(err).To(BeNil(), failMessage)
+	err = yaml.Unmarshal([]byte(file), &output)
+	failMessage = fmt.Sprintf("File at the path, %s, could not be parsed as YAML.\n Error: %s\n", path, err)
+	Expect(err).To(BeNil(), failMessage)
+	return output
+}
