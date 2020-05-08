@@ -31,13 +31,13 @@ var _ = Describe("Lab 1 Containers", func() {
 			Expect("../skaffold.yaml").To(BeAnExistingFile(), failMessage)
 		})
 
-		It("should have valid versions", func() {
+		It("should have valid versions in skaffold.yaml", func() {
 			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
 			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-version.yaml")
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 
-		It("should have valid build and local sections", func() {
+		It("should have valid build and local sections in skaffold.yaml", func() {
 			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
 			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-build.yaml")
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
@@ -49,6 +49,13 @@ var _ = Describe("Lab 1 Containers", func() {
 			failMessage = "deployment.yaml Doesn't Exist or is in the wrong location\n"
 			Expect("../charts/springtrader/templates/deployment.yaml").To(BeAnExistingFile(), failMessage)
 		})
+		/*
+			It("should have a valid deployment.yaml configuration", func() {
+				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/deployment.yaml")
+				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/deployment.yaml")
+				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			})
+		*/
 	})
 
 	Context("Step 7", func() {
@@ -56,6 +63,13 @@ var _ = Describe("Lab 1 Containers", func() {
 			failMessage = "statefulset.yaml Doesn't Exist or is in the wrong location\n"
 			Expect("../charts/springtrader/templates/statefulset.yaml").To(BeAnExistingFile(), failMessage)
 		})
+		/*
+			It("should have a valid statefulset.yaml configuration", func() {
+				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/statefulset.yaml")
+				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/statefulset.yaml")
+				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			})
+		*/
 	})
 
 	Context("Step 8", func() {
@@ -63,6 +77,13 @@ var _ = Describe("Lab 1 Containers", func() {
 			failMessage = "service.yaml Doesn't Exist or is in the wrong location\n"
 			Expect("../charts/springtrader/templates/service.yaml").To(BeAnExistingFile(), failMessage)
 		})
+		/*
+			It("should have a valid service.yaml configuration", func() {
+				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/service.yaml")
+				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/service.yaml")
+				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			})
+		*/
 	})
 
 	Context("Step 9", func() {
@@ -70,6 +91,13 @@ var _ = Describe("Lab 1 Containers", func() {
 			failMessage = "job.yaml Doesn't Exist or is in the wrong location\n"
 			Expect("../charts/springtrader/templates/job.yaml").To(BeAnExistingFile(), failMessage)
 		})
+		/*
+			It("should have a valid job.yaml configuration", func() {
+				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/job.yaml")
+				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/job.yaml")
+				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			})
+		*/
 	})
 
 	Context("Step 11", func() {
