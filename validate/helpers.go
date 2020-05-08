@@ -32,47 +32,20 @@ func treeValue(values interface{}, path []interface{}) (string, error) {
 	}
 }
 
-type treeCompareError struct {
-	Path []string
-}
-
-func (err *treeCompareError) Error() string {
-	var output = "Error found in %s"
-	for i := range err.Path {
-		output += err.Path[i]
-	}
-	return output
-}
-
-func (err *treeCompareError) Errorf(message string) *treeCompareError {
-	err.Path = append(err.Path, message)
-	return err
-}
-
-func (err *treeCompareError) Add(path string) {
-	err.Path = append(err.Path, path)
-}
-
 func treeCompare(actual interface{}, expected interface{}) error {
 	switch expectedType := expected.(type) {
-	case map[string]interface{}:
-		actualMap, ok := actual.(map[string]interface{})
+	case map[interface{}]interface{}:
+		actualMap, ok := actual.(map[interface{}]interface{})
 		if !ok {
-			/*
-				err := new *treeCompareError
-				return new *treeCompareError{ err.Errorf(fmt.Sprintf("actual value is of type %T, expected %T", actualMap, expectedType))}
-			*/
 			return fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
 		}
 		for key := range expectedType {
 			if actualMapValue, ok := actualMap[key]; ok {
 				err := treeCompare(actualMapValue, expectedType[key])
 				if err != nil {
-					//err.Add(key)
-					return err
+					return fmt.Errorf("%s: %s", key, err.Error())
 				}
 			} else {
-				//return fmt.Errorf("actual map did not contain key %s", key)
 				return fmt.Errorf("actual value is of type %T, expectedType %T", actual, expectedType)
 			}
 		}
@@ -86,7 +59,7 @@ func treeCompare(actual interface{}, expected interface{}) error {
 			if actualSliceValue := actualSlice[key]; ok {
 				err := treeCompare(actualSliceValue, expectedType[key])
 				if err != nil {
-					return err
+					return fmt.Errorf("%d: %s", key, err.Error())
 				}
 			} else {
 				return fmt.Errorf("actual slice did not contain key %d", key)
@@ -120,6 +93,8 @@ func treeCompare(actual interface{}, expected interface{}) error {
 			return fmt.Errorf("actual value of %v does not match expectedType boolean of %v", actualBool, expectedType)
 		}
 		return nil
+	default:
+		return fmt.Errorf("data type of type %T is not handled", expectedType)
 	}
 	return nil
 }
