@@ -1,4 +1,0 @@
-deploy:
-  helm:
-    releases:
-      - name: springtrader

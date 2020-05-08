@@ -31,16 +31,11 @@ var _ = Describe("Lab 1 Containers", func() {
 			Expect("../skaffold.yaml").To(BeAnExistingFile(), failMessage)
 		})
 
-		It("should have valid versions in skaffold.yaml", func() {
+		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
-			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-version.yaml")
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
-		})
-
-		It("should have valid build and local sections in skaffold.yaml", func() {
-			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
-			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-build.yaml")
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold.yaml")
+			failMessage = "skaffold.yaml has incorrect configuration\n"
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
 		})
 	})
 
@@ -101,28 +96,11 @@ var _ = Describe("Lab 1 Containers", func() {
 	})
 
 	Context("Step 11", func() {
-		It("skaffold file should still have valid versions", func() {
-			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
-			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-version.yaml")
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
-		})
-
-		It("should still have valid build and local sections", func() {
-			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
-			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-build.yaml")
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
-		})
-
-		It("skaffold file should have a deploy section", func() {
-			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
-			skaffoldActual := expectYamlToParse("./solution-data/lab01step11/skaffold-deploy.yaml")
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
-		})
-
 		It("skaffold file should have a profile section", func() {
 			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
-			skaffoldActual := expectYamlToParse("./solution-data/lab01step11/skaffold-profiles.yaml")
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step11/skaffold.yaml")
+			failMessage = "skaffold.yaml has incorrect configuration\n"
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
 		})
 	})
 
