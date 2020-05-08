@@ -1,6 +1,7 @@
 package validate
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -31,14 +32,14 @@ var _ = Describe("Lab 1 Containers", func() {
 		})
 
 		It("should have valid versions", func() {
-			skaffoldExpected := YamlToInterface("../skaffold.yaml")
-			skaffoldActual := YamlToInterface("./solution-data/lab01step03/skaffold-version.yaml")
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-version.yaml")
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 
 		It("should have valid build and local sections", func() {
-			skaffoldExpected := YamlToInterface("../skaffold.yaml")
-			skaffoldActual := YamlToInterface("./solution-data/lab01step03/skaffold-build.yaml")
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-build.yaml")
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 	})
@@ -73,26 +74,26 @@ var _ = Describe("Lab 1 Containers", func() {
 
 	Context("Step 11", func() {
 		It("skaffold file should still have valid versions", func() {
-			skaffoldExpected := YamlToInterface("../skaffold.yaml")
-			skaffoldActual := YamlToInterface("./solution-data/lab01step03/skaffold-version.yaml")
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-version.yaml")
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 
 		It("should still have valid build and local sections", func() {
-			skaffoldExpected := YamlToInterface("../skaffold.yaml")
-			skaffoldActual := YamlToInterface("./solution-data/lab01step03/skaffold-build.yaml")
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold-build.yaml")
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 
 		It("skaffold file should have a deploy section", func() {
-			skaffoldExpected := YamlToInterface("../skaffold.yaml")
-			skaffoldActual := YamlToInterface("./solution-data/lab01step11/skaffold-deploy.yaml")
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step11/skaffold-deploy.yaml")
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 
 		It("skaffold file should have a profile section", func() {
-			skaffoldExpected := YamlToInterface("../skaffold.yaml")
-			skaffoldActual := YamlToInterface("./solution-data/lab01step11/skaffold-profiles.yaml")
+			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
+			skaffoldActual := expectYamlToParse("./solution-data/lab01step11/skaffold-profiles.yaml")
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 		})
 	})
@@ -105,9 +106,13 @@ var _ = Describe("Lab 1 Containers", func() {
 	})
 })
 
-func YamlToInterface(path string) interface{} {
+func expectYamlToParse(path string) interface{} {
 	var output interface{}
-	file, _ := ioutil.ReadFile(path)
-	yaml.Unmarshal([]byte(file), &output)
+	file, err := ioutil.ReadFile(path)
+	failMessage := fmt.Sprintf("File at the path, %s, cannot be found. File may be in wrong location or misnamed.\n", path)
+	Expect(err).To(BeNil())
+	err = yaml.Unmarshal([]byte(file), &output)
+	failMessage = fmt.Sprintf("File at the path, %s, could not be parsed as YAML.\n Error: %s\n", path, err)
+	Expect(err).To(BeNil(), failMessage)
 	return output
 }

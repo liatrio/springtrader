@@ -29,8 +29,18 @@ func (err *treeCompareError) Add(path string) {
 }
 */
 
-func treeCompare(actual interface{}, expected interface{}) (bool, error) {
-	switch expectedType := expected.(type) {
+func ValidateYamlObject(expected interface{}) types.GomegaMatcher {
+	return &validateYaml{
+		expected: expected,
+	}
+}
+
+type validateYaml struct {
+	expected interface{}
+}
+
+func (matcher *validateYaml) Match(actual interface{}) (success bool, err error) {
+	switch expectedType := matcher.expected.(type) {
 	case map[interface{}]interface{}:
 		actualMap, ok := actual.(map[interface{}]interface{})
 		if !ok {
@@ -38,7 +48,8 @@ func treeCompare(actual interface{}, expected interface{}) (bool, error) {
 		}
 		for key := range actualMap {
 			if expectedTypeValue, ok := expectedType[key.(string)]; ok {
-				_, err := treeCompare(actualMap[key.(string)], expectedTypeValue)
+				nestedExpectedObject := validateYaml{expectedTypeValue}
+				_, err := nestedExpectedObject.Match(actualMap[key.(string)])
 				if err != nil {
 					return false, err
 				}
@@ -54,7 +65,8 @@ func treeCompare(actual interface{}, expected interface{}) (bool, error) {
 		}
 		for key := range actualSlice {
 			if expectedTypeValue := expectedType[key]; ok {
-				_, err := treeCompare(actualSlice[key], expectedTypeValue)
+				nestedExpectedObject := validateYaml{expectedTypeValue}
+				_, err := nestedExpectedObject.Match(actualSlice[key])
 				if err != nil {
 					return false, err
 				}
@@ -93,24 +105,6 @@ func treeCompare(actual interface{}, expected interface{}) (bool, error) {
 	default:
 		return false, fmt.Errorf("expectedType of %T did not match any expected types", expectedType)
 	}
-}
-
-func ValidateYamlObject(expected interface{}) types.GomegaMatcher {
-	return &validateYaml{
-		expected: expected,
-	}
-}
-
-type validateYaml struct {
-	expected interface{}
-}
-
-func (matcher *validateYaml) Match(actual interface{}) (success bool, err error) {
-	success, err = treeCompare(actual, matcher.expected)
-	if success == false {
-		return success, err
-	}
-	return success, nil
 }
 
 func (matcher *validateYaml) FailureMessage(actual interface{}) (message string) {
