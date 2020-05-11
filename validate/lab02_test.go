@@ -1,10 +1,7 @@
 package validate
 
 import (
-	"fmt"
-	"io/ioutil"
 	"log"
-	"gopkg.in/yaml.v2"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
