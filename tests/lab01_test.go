@@ -31,8 +31,8 @@ var _ = Describe("Lab 1 Containers", func() {
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
 			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab01/step03-skaffold.yaml")
-			failMessage = "skaffold.yaml has incorrect configuration\n"
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
+			failMessage = "skaffold.yaml has incorrect configuration"
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected, &failMessage))
 		})
 	})
 
@@ -69,7 +69,7 @@ var _ = Describe("Lab 1 Containers", func() {
 			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
 			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab01/step11-skaffold.yaml")
 			failMessage = "skaffold.yaml has incorrect configuration\n"
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected, &failMessage))
 		})
 	})
 

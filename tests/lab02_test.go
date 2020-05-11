@@ -20,12 +20,11 @@ var _ = Describe("Lab 2 Continuous Delivery", func() {
 			failMessage = "skaffold.yaml doesn't exist or is in the wrong location\n"
 			Expect("../skaffold.yaml").To(BeAnExistingFile(), failMessage)
 		})
-
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
 			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab02/step01-skaffold.yaml")
-			failMessage = "skaffold.yaml has incorrect configuration\n"
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
+			failMessage = "skaffold.yaml has incorrect configuration"
+			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected, &failMessage))
 		})
 	})
 
