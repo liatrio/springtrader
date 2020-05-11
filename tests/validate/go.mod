@@ -1,4 +1,4 @@
-module github.com/liatrio/springtrader/validate
+module github.com/liatrio/springtrader/tests/validate
 
 go 1.13
 

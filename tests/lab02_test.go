@@ -5,10 +5,10 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/springtrader/validate"
+	. "github.com/springtrader/tests/validate"
 )
 
-var _ = Describe("Lab 2 ", func() {
+var _ = Describe("Lab 2 Continuous Delivery", func() {
 	var failMessage string
 
 	BeforeEach(func() {

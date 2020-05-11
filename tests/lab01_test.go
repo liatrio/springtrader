@@ -5,7 +5,7 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/springtrader/validate"
+	. "github.com/springtrader/tests/validate"
 )
 
 var _ = Describe("Lab 1 Containers", func() {
