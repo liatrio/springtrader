@@ -2,8 +2,10 @@ package validate
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	"github.com/onsi/gomega/types"
+	"gopkg.in/yaml.v2"
 )
 
 /*
@@ -113,4 +115,15 @@ func (matcher *validateYaml) FailureMessage(actual interface{}) (message string)
 
 func (matcher *validateYaml) NegatedFailureMessage(actual interface{}) (message string) {
 	return fmt.Sprintf("Expected\n\t%#v\nnot to contain the JSON representation of\n\t%#v", actual, matcher.expected)
+}
+
+func ExpectYamlToParse(path string) interface{} {
+	var output interface{}
+	file, err := ioutil.ReadFile(path)
+	failMessage := fmt.Sprintf("File at the path, %s, cannot be found. File may be in wrong location or misnamed.\n", path)
+	Expect(err).To(BeNil(), failMessage)
+	err = yaml.Unmarshal([]byte(file), &output)
+	failMessage = fmt.Sprintf("File at the path, %s, could not be parsed as YAML.\n Error: %s\n", path, err)
+	Expect(err).To(BeNil(), failMessage)
+	return output
 }

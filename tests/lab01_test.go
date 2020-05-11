@@ -1,14 +1,11 @@
-package validate
+package main
 
 import (
-	"fmt"
-	"io/ioutil"
 	"log"
-
-	"gopkg.in/yaml.v2"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/springtrader/validate"
 )
 
 var _ = Describe("Lab 1 Containers", func() {
@@ -32,8 +29,8 @@ var _ = Describe("Lab 1 Containers", func() {
 		})
 
 		It("should have a valid skaffold.yaml", func() {
-			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
-			skaffoldActual := expectYamlToParse("./solution-data/lab01/step03-skaffold.yaml")
+			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
+			skaffoldActual := ExpectYamlToParse("./solution-data/lab01/step03-skaffold.yaml")
 			failMessage = "skaffold.yaml has incorrect configuration\n"
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
 		})
@@ -46,8 +43,8 @@ var _ = Describe("Lab 1 Containers", func() {
 		})
 		/*
 			It("should have a valid deployment.yaml configuration", func() {
-				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/deployment.yaml")
-				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/deployment.yaml")
+				skaffoldExpected := ExpectYamlToParse("../charts/springtrader/templates/deployment.yaml")
+				skaffoldActual := ExpectYamlToParse("./solution-data/lab01step05/deployment.yaml")
 				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 			})
 		*/
@@ -60,8 +57,8 @@ var _ = Describe("Lab 1 Containers", func() {
 		})
 		/*
 			It("should have a valid statefulset.yaml configuration", func() {
-				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/statefulset.yaml")
-				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/statefulset.yaml")
+				skaffoldExpected := ExpectYamlToParse("../charts/springtrader/templates/statefulset.yaml")
+				skaffoldActual := ExpectYamlToParse("./solution-data/lab01step05/statefulset.yaml")
 				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 			})
 		*/
@@ -74,8 +71,8 @@ var _ = Describe("Lab 1 Containers", func() {
 		})
 		/*
 			It("should have a valid service.yaml configuration", func() {
-				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/service.yaml")
-				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/service.yaml")
+				skaffoldExpected := ExpectYamlToParse("../charts/springtrader/templates/service.yaml")
+				skaffoldActual := ExpectYamlToParse("./solution-data/lab01step05/service.yaml")
 				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 			})
 		*/
@@ -88,8 +85,8 @@ var _ = Describe("Lab 1 Containers", func() {
 		})
 		/*
 			It("should have a valid job.yaml configuration", func() {
-				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/job.yaml")
-				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/job.yaml")
+				skaffoldExpected := ExpectYamlToParse("../charts/springtrader/templates/job.yaml")
+				skaffoldActual := ExpectYamlToParse("./solution-data/lab01step05/job.yaml")
 				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
 			})
 		*/
@@ -97,8 +94,8 @@ var _ = Describe("Lab 1 Containers", func() {
 
 	Context("Step 11", func() {
 		It("skaffold file should have a profile section", func() {
-			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
-			skaffoldActual := expectYamlToParse("./solution-data/lab01/step11-skaffold.yaml")
+			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
+			skaffoldActual := ExpectYamlToParse("./solution-data/lab01/step11-skaffold.yaml")
 			failMessage = "skaffold.yaml has incorrect configuration\n"
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
 		})
@@ -111,14 +108,3 @@ var _ = Describe("Lab 1 Containers", func() {
 		}
 	})
 })
-
-func expectYamlToParse(path string) interface{} {
-	var output interface{}
-	file, err := ioutil.ReadFile(path)
-	failMessage := fmt.Sprintf("File at the path, %s, cannot be found. File may be in wrong location or misnamed.\n", path)
-	Expect(err).To(BeNil(), failMessage)
-	err = yaml.Unmarshal([]byte(file), &output)
-	failMessage = fmt.Sprintf("File at the path, %s, could not be parsed as YAML.\n Error: %s\n", path, err)
-	Expect(err).To(BeNil(), failMessage)
-	return output
-}
