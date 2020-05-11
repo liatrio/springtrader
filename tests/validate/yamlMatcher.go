@@ -9,29 +9,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-/*
-type treeCompareError struct {
-	Path []string
-}
-
-func (err *treeCompareError) Error() string {
-	var output = "Error found in %s"
-	for i := range err.Path {
-		output += err.Path[i]
-	}
-	return output
-}
-
-func (err *treeCompareError) Errorf(message string) *treeCompareError {
-	err.Path = append(err.Path, message)
-	return err
-}
-
-func (err *treeCompareError) Add(path string) {
-	err.Path = append(err.Path, path)
-}
-*/
-
 func ValidateYamlObject(expected interface{}) types.GomegaMatcher {
 	return &validateYaml{
 		expected: expected,
