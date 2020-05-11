@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/types"
 	"gopkg.in/yaml.v2"
 )

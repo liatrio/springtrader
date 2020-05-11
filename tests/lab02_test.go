@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
+	. "github.com/liatrio/springtrader/tests/validate"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/springtrader/tests/validate"
 )
 
 var _ = Describe("Lab 2 Continuous Delivery", func() {
@@ -22,8 +22,8 @@ var _ = Describe("Lab 2 Continuous Delivery", func() {
 		})
 
 		It("should have a valid skaffold.yaml", func() {
-			skaffoldExpected := validate.ExpectYamlToParse("../skaffold.yaml")
-			skaffoldActual := validate.ExpectYamlToParse("./solution-data/lab02/step01-skaffold.yaml")
+			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
+			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab02/step01-skaffold.yaml")
 			failMessage = "skaffold.yaml has incorrect configuration\n"
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
 		})
