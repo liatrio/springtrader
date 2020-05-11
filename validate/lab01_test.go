@@ -30,13 +30,14 @@ var _ = Describe("Lab 1 Containers", func() {
 			failMessage = "skaffold.yaml Doesn't Exist or is in the wrong location\n"
 			Expect("../skaffold.yaml").To(BeAnExistingFile(), failMessage)
 		})
-
+        /*
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
 			skaffoldActual := expectYamlToParse("./solution-data/lab01step03/skaffold.yaml")
 			failMessage = "skaffold.yaml has incorrect configuration\n"
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
 		})
+        */
 	})
 
 	Context("Step 6", func() {
@@ -44,13 +45,14 @@ var _ = Describe("Lab 1 Containers", func() {
 			failMessage = "deployment.yaml Doesn't Exist or is in the wrong location\n"
 			Expect("../charts/springtrader/templates/deployment.yaml").To(BeAnExistingFile(), failMessage)
 		})
-		/*
-			It("should have a valid deployment.yaml configuration", func() {
-				skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/deployment.yaml")
-				skaffoldActual := expectYamlToParse("./solution-data/lab01step05/deployment.yaml")
-				Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected))
-			})
-		*/
+        /*
+        It("should have a valid deployment.yaml configuration", func() {
+            skaffoldExpected := expectYamlToParse("../charts/springtrader/templates/deployment.yaml")
+            skaffoldActual := expectYamlToParse("./solution-data/lab01step05/deployment.yaml")
+			failMessage = "deployment.yaml has incorrect configuration\n"
+            Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
+        })
+        */
 	})
 
 	Context("Step 7", func() {
@@ -96,12 +98,14 @@ var _ = Describe("Lab 1 Containers", func() {
 	})
 
 	Context("Step 11", func() {
+        /*
 		It("skaffold file should have a profile section", func() {
 			skaffoldExpected := expectYamlToParse("../skaffold.yaml")
 			skaffoldActual := expectYamlToParse("./solution-data/lab01step11/skaffold.yaml")
 			failMessage = "skaffold.yaml has incorrect configuration\n"
 			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected), failMessage)
 		})
+        */
 	})
 
 	AfterEach(func() {
