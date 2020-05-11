@@ -1,4 +1,3 @@
-### [build]
 apiVersion: skaffold/v1beta12
 kind: Config
 build:
@@ -16,21 +15,15 @@ build:
         - harbor.toolchain.lead.prod.liatr.io/flywheel/springtrader-builder:latest
         - harbor.toolchain.lead.prod.liatr.io/flywheel/springtrader-runner:latest
   local: {}
-### [build]
-
-### [deploy]
 deploy:
   helm:
-    flags:
-      upgrade: ["--timeout", "600s"]
-      install: ["--timeout", "600s"]
     releases:
-      - name: springtrader
+      - name: springtrader 
         chartPath: ./charts/springtrader
         wait: true
         values:
-          image: springtrader
-          sqlfdb: sqlfdb
+          image: springtrader 
+          sqlfdb: sqlfdb 
         setValueTemplates:
           istioDomain: "{{.ISTIO_DOMAIN}}"
           productName: "{{.PRODUCT_NAME}}"
@@ -41,6 +34,6 @@ profiles:
   patches:
   - op: add
     path: /deploy/helm/releases/0/setValues
-    value:
+    value: 
       storageClassName: standard
-### [deploy]
+

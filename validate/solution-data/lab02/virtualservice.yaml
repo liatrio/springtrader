@@ -1,0 +1,17 @@
+{{- if not (eq .Values.istioDomain "<no value>") -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: "{{ .Chart.Name }}"
+spec:
+  hosts:
+  - {{ .Chart.Name }}-{{ .Values.productName }}.{{ .Values.istioDomain }}
+  gateways:
+  - "istio-system/app-gateway"
+  http:
+  - route:
+    - destination:
+        host: springtrader
+        port:
+          number: 8080
+{{- end }}
