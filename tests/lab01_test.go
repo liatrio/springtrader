@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
 	. "github.com/liatrio/springtrader/tests/validate"
 	. "github.com/onsi/ginkgo"
@@ -31,8 +31,11 @@ var _ = Describe("Lab 1 Containers", func() {
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
 			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab01/step03-skaffold.yaml")
-			failMessage = "skaffold.yaml has incorrect configuration"
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected, &failMessage))
+			_, err := ValidateYamlObject(skaffoldExpected, &failMessage).Match(skaffoldActual)
+			if err != nil {
+				failMessage = fmt.Sprintf("skaffold.yaml has incorrect configuration; %s\n", err.Error())
+			}
+			Expect(err).To(BeNil())
 		})
 	})
 
@@ -68,13 +71,15 @@ var _ = Describe("Lab 1 Containers", func() {
 		It("skaffold file should have a profile section", func() {
 			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
 			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab01/step11-skaffold.yaml")
-			failMessage = "skaffold.yaml has incorrect configuration\n"
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected, &failMessage))
+			_, err := ValidateYamlObject(skaffoldExpected, &failMessage).Match(skaffoldActual)
+			if err != nil {
+				failMessage = fmt.Sprintf("skaffold.yaml has incorrect configuration; %s\n", err.Error())
+			}
+			Expect(err).To(BeNil())
 		})
 	})
 
 	AfterEach(func() {
-		log.Printf("%v\n", CurrentGinkgoTestDescription())
 		if CurrentGinkgoTestDescription().Failed {
 			ConcatenatedMessage += failMessage
 		}

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
 	. "github.com/liatrio/springtrader/tests/validate"
 	. "github.com/onsi/ginkgo"
@@ -23,8 +23,11 @@ var _ = Describe("Lab 2 Continuous Delivery", func() {
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
 			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab02/step01-skaffold.yaml")
-			failMessage = "skaffold.yaml has incorrect configuration"
-			Expect(skaffoldActual).To(ValidateYamlObject(skaffoldExpected, &failMessage))
+			_, err := ValidateYamlObject(skaffoldExpected, &failMessage).Match(skaffoldActual)
+			if err != nil {
+				failMessage = fmt.Sprintf("skaffold.yaml has incorrect configuration; %s\n", err.Error())
+			}
+			Expect(err).To(BeNil())
 		})
 	})
 
@@ -36,7 +39,6 @@ var _ = Describe("Lab 2 Continuous Delivery", func() {
 	})
 
 	AfterEach(func() {
-		log.Printf("%v\n", CurrentGinkgoTestDescription())
 		if CurrentGinkgoTestDescription().Failed {
 			ConcatenatedMessage += failMessage
 		}

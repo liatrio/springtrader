@@ -11,14 +11,12 @@ import (
 
 func ValidateYamlObject(expected interface{}, failureMessage *string) types.GomegaMatcher {
 	return &validateYaml{
-		expected:       expected,
-		failureMessage: failureMessage,
+		expected: expected,
 	}
 }
 
 type validateYaml struct {
-	expected       interface{}
-	failureMessage *string
+	expected interface{}
 }
 
 func (matcher *validateYaml) Match(actual interface{}) (success bool, err error) {
@@ -26,62 +24,62 @@ func (matcher *validateYaml) Match(actual interface{}) (success bool, err error)
 	case map[interface{}]interface{}:
 		actualMap, ok := actual.(map[interface{}]interface{})
 		if !ok {
-			return false, typeMismatchError(matcher, actual, expectedType)
+			return false, typeMismatchError(actual, expectedType)
 		}
 		for key, value := range actualMap {
 			if expectedTypeValue, ok := expectedType[key.(string)]; ok {
-				nestedExpectedObject := validateYaml{expectedTypeValue, matcher.failureMessage}
+				nestedExpectedObject := validateYaml{expectedTypeValue}
 				_, err := nestedExpectedObject.Match(actualMap[key.(string)])
 				if err != nil {
-					return false, recursiveCallError(matcher, nestedExpectedObject, actualMap[key.(string)], err)
+					return false, recursiveCallError(nestedExpectedObject, actualMap[key.(string)], err)
 				}
 			} else {
-				return false, valueComparisonError(matcher, actual, value, expectedType, expectedTypeValue)
+				return false, valueComparisonError(actual, value, expectedType, expectedTypeValue)
 			}
 		}
 		return true, nil
 	case []interface{}:
 		actualSlice, ok := actual.([]interface{})
 		if !ok {
-			return false, typeMismatchError(matcher, actual, expectedType)
+			return false, typeMismatchError(actual, expectedType)
 		}
 		for i, value := range actualSlice {
 			if expectedTypeValue := expectedType[i]; ok {
-				nestedExpectedObject := validateYaml{expectedTypeValue, matcher.failureMessage}
+				nestedExpectedObject := validateYaml{expectedTypeValue}
 				_, err := nestedExpectedObject.Match(actualSlice[i])
 				if err != nil {
-					return false, recursiveCallError(matcher, nestedExpectedObject, actualSlice[i], err)
+					return false, recursiveCallError(nestedExpectedObject, actualSlice[i], err)
 				}
 			} else {
-				return false, valueComparisonError(matcher, actual, value, expectedType, expectedTypeValue)
+				return false, valueComparisonError(actual, value, expectedType, expectedTypeValue)
 			}
 		}
 		return true, nil
 	case string:
 		actualString, ok := actual.(string)
 		if !ok {
-			return false, typeMismatchError(matcher, actual, expectedType)
+			return false, typeMismatchError(actual, expectedType)
 		}
 		if actualString != expectedType {
-			return false, valueComparisonError(matcher, actualString, nil, expectedType, nil)
+			return false, valueComparisonError(actualString, nil, expectedType, nil)
 		}
 		return true, nil
 	case int:
 		actualInt, ok := actual.(int)
 		if !ok {
-			return false, typeMismatchError(matcher, actual, expectedType)
+			return false, typeMismatchError(actual, expectedType)
 		}
 		if actualInt != expectedType {
-			return false, valueComparisonError(matcher, actualInt, nil, expectedType, nil)
+			return false, valueComparisonError(actualInt, nil, expectedType, nil)
 		}
 		return true, nil
 	case bool:
 		actualBool, ok := actual.(bool)
 		if !ok {
-			return false, typeMismatchError(matcher, actual, expectedType)
+			return false, typeMismatchError(actual, expectedType)
 		}
 		if actualBool != expectedType {
-			return false, valueComparisonError(matcher, actualBool, nil, expectedType, nil)
+			return false, valueComparisonError(actualBool, nil, expectedType, nil)
 		}
 		return true, nil
 	default:
@@ -90,11 +88,11 @@ func (matcher *validateYaml) Match(actual interface{}) (success bool, err error)
 }
 
 func (matcher *validateYaml) FailureMessage(actual interface{}) (message string) {
-	return fmt.Sprintf("Expected\n\t%#v\nto contain the JSON representation of\n\t%#v", actual, matcher.expected)
+	return fmt.Sprintf("Expected %v to be the same value as %v", actual, matcher.expected)
 }
 
 func (matcher *validateYaml) NegatedFailureMessage(actual interface{}) (message string) {
-	return fmt.Sprintf("Expected\n\t%#v\nnot to contain the JSON representation of\n\t%#v", actual, matcher.expected)
+	return fmt.Sprintf("Expected %v to be the same value as %v", actual, matcher.expected)
 }
 
 func ExpectYamlToParse(path string) interface{} {
@@ -108,31 +106,28 @@ func ExpectYamlToParse(path string) interface{} {
 	return output
 }
 
-func typeMismatchError(matcher *validateYaml, actual interface{}, expected interface{}) error {
-	errStr := fmt.Sprintf("%s; Your value type %T, is not the same as the correct type, %T", *matcher.failureMessage, expected, actual)
-	matcher.failureMessage = &errStr
-	return fmt.Errorf(errStr)
+func typeMismatchError(actual interface{}, expected interface{}) error {
+	return fmt.Errorf("Your value type %T, is not the same as the correct type, %T", expected, actual)
 }
 
-func valueComparisonError(matcher *validateYaml, actual interface{}, actualValue interface{}, expected interface{}, expectedValue interface{}) error {
+func valueComparisonError(actual interface{}, actualValue interface{}, expected interface{}, expectedValue interface{}) error {
 	var errStr string
 	if actualValue == nil && expectedValue == nil {
 		switch actualType := actual.(type) {
 		case string:
-			errStr = fmt.Sprintf("%s; Your value, %v, did not have the correct value, %v", *matcher.failureMessage, actualType, expected.(string))
+			errStr = fmt.Sprintf("Your value, %v, did not have the correct value, %v", expected.(string), actualType)
 		case int:
-			errStr = fmt.Sprintf("%s; Your value, %d, did not have the correct value, %d", *matcher.failureMessage, actualType, expected.(int))
+			errStr = fmt.Sprintf("Your value, %d, did not have the correct value, %d", expected.(int), actualType)
 		case bool:
 		default:
-			errStr = fmt.Sprintf("%s; Your value, %t, did not have the correct value, %t", *matcher.failureMessage, actualType, expected.(bool))
+			errStr = fmt.Sprintf("Your value, %t, did not have the correct value, %t", expected.(bool), actualType)
 		}
 	} else {
-		errStr = fmt.Sprintf("%s; Your %T with value, %T, did not have the correct value, %T , of field,  %T", *matcher.failureMessage, actual, actualValue, expected, expectedValue)
+		errStr = fmt.Sprintf("Your %T with value, %T, did not have the correct value, %T , of field,  %T", actual, actualValue, expected, expectedValue)
 	}
-	matcher.failureMessage = &errStr
 	return fmt.Errorf(errStr)
 }
 
-func recursiveCallError(matcher *validateYaml, expected interface{}, actual interface{}, err error) error {
+func recursiveCallError(expected interface{}, actual interface{}, err error) error {
 	return err
 }
