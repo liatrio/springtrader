@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Lab 2 Continuous Delivery", func() {
+var _ = Describe("Lab 2", func() {
 	var failMessage string
 
 	BeforeEach(func() {

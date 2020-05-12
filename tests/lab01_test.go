@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Lab 1 Containers", func() {
+var _ = Describe("Lab 1", func() {
 	var failMessage string
 
 	BeforeEach(func() {
