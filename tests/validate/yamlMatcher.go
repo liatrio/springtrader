@@ -3,8 +3,8 @@ package validate
 import (
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 
-	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/types"
 	"gopkg.in/yaml.v2"
 )
@@ -95,15 +95,19 @@ func (matcher *validateYaml) NegatedFailureMessage(actual interface{}) (message 
 	return fmt.Sprintf("Expected %v to be the same value as %v", actual, matcher.expected)
 }
 
-func ExpectYamlToParse(path string) interface{} {
+func ExpectYamlToParse(path string) (interface{}, string) {
 	var output interface{}
 	file, err := ioutil.ReadFile(path)
-	failMessage := fmt.Sprintf("File at the path, %s, cannot be found. File may be in wrong location or misnamed.\n", path)
-	Expect(err).To(BeNil(), failMessage)
+	failMessage := fmt.Sprintf("Your %s file cannot be found. File may be in wrong location or misnamed.\n", filepath.Base(path))
+	if err != nil {
+		return nil, failMessage
+	}
 	err = yaml.Unmarshal([]byte(file), &output)
-	failMessage = fmt.Sprintf("File at the path, %s, could not be parsed as YAML. Error: %s\n", path, err)
-	Expect(err).To(BeNil(), failMessage)
-	return output
+	failMessage = fmt.Sprintf("Your %s file could not be read as YAML. Possible issues with formatting: %s\n", filepath.Base(path), err)
+	if err != nil {
+		return nil, failMessage
+	}
+	return output, ""
 }
 
 func typeMismatchError(actual interface{}, expected interface{}) error {
