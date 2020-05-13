@@ -30,12 +30,14 @@ var _ = Describe("Lab 1", func() {
 
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
+			failMessage = fmt.Sprintf("Your skaffold.yaml seems to empty. Try again after configuring your file\n")
+			Expect(skaffoldExpected).ToNot(BeNil(), failMessage)
 			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab01/step03-skaffold.yaml")
 			_, err := ValidateYamlObject(skaffoldExpected, &failMessage).Match(skaffoldActual)
 			if err != nil {
 				failMessage = fmt.Sprintf("skaffold.yaml has incorrect configuration; %s\n", err.Error())
 			}
-			Expect(err).To(BeNil())
+			Expect(err).To(BeNil(), failMessage)
 		})
 	})
 
@@ -70,6 +72,8 @@ var _ = Describe("Lab 1", func() {
 	Context("Step 11", func() {
 		It("skaffold file should have a profile section", func() {
 			skaffoldExpected := ExpectYamlToParse("../skaffold.yaml")
+			failMessage = fmt.Sprintf("Your skaffold.yaml seems to empty. Try again after configuring your file\n")
+			Expect(skaffoldExpected).ToNot(BeNil(), failMessage)
 			skaffoldActual := ExpectYamlToParse("./validate/solution-data/lab01/step11-skaffold.yaml")
 			_, err := ValidateYamlObject(skaffoldExpected, &failMessage).Match(skaffoldActual)
 			if err != nil {
