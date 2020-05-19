@@ -86,15 +86,15 @@ var _ = Describe("Lab 2 aws", func() {
 			Expect("../buildspec-build.yaml").To(BeAnExistingFile(), failMessage)
 		})
 		It("should have a valid Build buildspec", func() {
-			skaffoldExpected, errorMessage := ExpectYamlToParse("../buildspec-build.yaml")
+			buildspecExpected, errorMessage := ExpectYamlToParse("../buildspec-build.yaml")
 			if errorMessage != "" {
 				failMessage = errorMessage
 			}
 			Expect(errorMessage).To(BeEmpty(), failMessage)
 			failMessage = fmt.Sprintf("Your buildspec-build.yaml seems to empty. Try again after configuring your file\n")
-			Expect(skaffoldExpected).ToNot(BeNil(), failMessage)
-			skaffoldActual, _ := ExpectYamlToParse("./validate/solution-data/lab02/step03-build-buildspec.yaml")
-			_, err := ValidateYamlObject(skaffoldExpected, &failMessage).Match(skaffoldActual)
+			Expect(buildspecExpected).ToNot(BeNil(), failMessage)
+			buildspecActual, _ := ExpectYamlToParse("./validate/solution-data/lab02/step03-build-buildspec.yaml")
+			_, err := ValidateYamlObject(buildspecExpected, &failMessage).Match(buildspecActual)
 			if err != nil {
 				failMessage = fmt.Sprintf("buildspec-build.yaml has incorrect configuration; %s\n", err.Error())
 			}
@@ -108,15 +108,15 @@ var _ = Describe("Lab 2 aws", func() {
 			Expect("../buildspec-staging.yaml").To(BeAnExistingFile(), failMessage)
 		})
 		It("should have a valid Staging buildspec", func() {
-			skaffoldExpected, errorMessage := ExpectYamlToParse("../buildspec-staging.yaml")
+			buildspecExpected, errorMessage := ExpectYamlToParse("../buildspec-staging.yaml")
 			if errorMessage != "" {
 				failMessage = errorMessage
 			}
 			Expect(errorMessage).To(BeEmpty(), failMessage)
 			failMessage = fmt.Sprintf("Your buildspec-staging.yaml seems to empty. Try again after configuring your file\n")
-			Expect(skaffoldExpected).ToNot(BeNil(), failMessage)
-			skaffoldActual, _ := ExpectYamlToParse("./validate/solution-data/lab02/step03-staging-buildspec.yaml")
-			_, err := ValidateYamlObject(skaffoldExpected, &failMessage).Match(skaffoldActual)
+			Expect(buildspecExpected).ToNot(BeNil(), failMessage)
+			buildspecActual, _ := ExpectYamlToParse("./validate/solution-data/lab02/step03-staging-buildspec.yaml")
+			_, err := ValidateYamlObject(buildspecExpected, &failMessage).Match(buildspecActual)
 			if err != nil {
 				failMessage = fmt.Sprintf("buildspec-staging.yaml has incorrect configuration; %s\n", err.Error())
 			}
@@ -130,15 +130,15 @@ var _ = Describe("Lab 2 aws", func() {
 			Expect("../buildspec-prod.yaml").To(BeAnExistingFile(), failMessage)
 		})
 		It("should have a valid Prod buildspec", func() {
-			skaffoldExpected, errorMessage := ExpectYamlToParse("../buildspec-prod.yaml")
+			buildspecExpected, errorMessage := ExpectYamlToParse("../buildspec-prod.yaml")
 			if errorMessage != "" {
 				failMessage = errorMessage
 			}
 			Expect(errorMessage).To(BeEmpty(), failMessage)
 			failMessage = fmt.Sprintf("Your buildspec-prod.yaml seems to empty. Try again after configuring your file\n")
-			Expect(skaffoldExpected).ToNot(BeNil(), failMessage)
-			skaffoldActual, _ := ExpectYamlToParse("./validate/solution-data/lab02/step03-prod-buildspec.yaml")
-			_, err := ValidateYamlObject(skaffoldExpected, &failMessage).Match(skaffoldActual)
+			Expect(buildspecExpected).ToNot(BeNil(), failMessage)
+			buildspecActual, _ := ExpectYamlToParse("./validate/solution-data/lab02/step03-prod-buildspec.yaml")
+			_, err := ValidateYamlObject(buildspecExpected, &failMessage).Match(buildspecActual)
 			if err != nil {
 				failMessage = fmt.Sprintf("buildspec-prod.yaml has incorrect configuration; %s\n", err.Error())
 			}
