@@ -46,7 +46,7 @@ var _ = Describe("Lab 2 jenkins", func() {
 
 	AfterEach(func() {
 		if CurrentGinkgoTestDescription().Failed {
-			ConcatenatedMessage += failMessage
+			ConcatenatedMessage = ConcatenatedMessage + failMessage + "\n"
 		}
 	})
 })
