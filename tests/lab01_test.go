@@ -23,11 +23,6 @@ var _ = Describe("Lab 1", func() {
 	})
 
 	Context("Step 3", func() {
-		It("should have a skaffold.yaml file", func() {
-			failMessage = "skaffold.yaml doesn't exist or is in the wrong location\n"
-			Expect("../skaffold.yaml").To(BeAnExistingFile(), failMessage)
-		})
-
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected, errorMessage := ExpectYamlToParse("../skaffold.yaml")
 			if errorMessage != "" {

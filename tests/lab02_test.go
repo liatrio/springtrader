@@ -16,10 +16,6 @@ var _ = Describe("Lab 2 jenkins", func() {
 	})
 
 	Context("Step 1", func() {
-		It("should have a skaffold.yaml file", func() {
-			failMessage = "skaffold.yaml doesn't exist or is in the wrong location\n"
-			Expect("../skaffold.yaml").To(BeAnExistingFile(), failMessage)
-		})
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected, errorMessage := ExpectYamlToParse("../skaffold.yaml")
 			if errorMessage != "" {
@@ -59,10 +55,6 @@ var _ = Describe("Lab 2 aws", func() {
 	})
 
 	Context("Step 1", func() {
-		It("should have a skaffold.yaml file", func() {
-			failMessage = "skaffold.yaml doesn't exist or is in the wrong location\n"
-			Expect("../skaffold.yaml").To(BeAnExistingFile(), failMessage)
-		})
 		It("should have a valid skaffold.yaml", func() {
 			skaffoldExpected, errorMessage := ExpectYamlToParse("../skaffold.yaml")
 			if errorMessage != "" {
@@ -81,10 +73,6 @@ var _ = Describe("Lab 2 aws", func() {
 	})
 
 	Context("Step 3.2", func() {
-		It("should have a Build buildspec file", func() {
-			failMessage = "Build buildspec doesn't exist or is in the wrong location\n"
-			Expect("../buildspec-build.yaml").To(BeAnExistingFile(), failMessage)
-		})
 		It("should have a valid Build buildspec", func() {
 			buildspecExpected, errorMessage := ExpectYamlToParse("../buildspec-build.yaml")
 			if errorMessage != "" {
@@ -103,10 +91,6 @@ var _ = Describe("Lab 2 aws", func() {
 	})
 
 	Context("Step 3.3", func() {
-		It("should have a Staging buildspec file", func() {
-			failMessage = "Staging buildspec doesn't exist or is in the wrong location\n"
-			Expect("../buildspec-staging.yaml").To(BeAnExistingFile(), failMessage)
-		})
 		It("should have a valid Staging buildspec", func() {
 			buildspecExpected, errorMessage := ExpectYamlToParse("../buildspec-staging.yaml")
 			if errorMessage != "" {
@@ -125,10 +109,6 @@ var _ = Describe("Lab 2 aws", func() {
 	})
 
 	Context("Step 3.5", func() {
-		It("should have a Prod buildspec file", func() {
-			failMessage = "Prod buildspec doesn't exist or is in the wrong location\n"
-			Expect("../buildspec-prod.yaml").To(BeAnExistingFile(), failMessage)
-		})
 		It("should have a valid Prod buildspec", func() {
 			buildspecExpected, errorMessage := ExpectYamlToParse("../buildspec-prod.yaml")
 			if errorMessage != "" {
