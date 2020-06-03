@@ -9,4 +9,3 @@ bin
 vf.gf.dmn-events.txt
 vf.gf.dmn-license.cfg
 dist
-tests/validate/slack_output.md
