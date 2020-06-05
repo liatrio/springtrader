@@ -65,4 +65,8 @@ spec:
             cpu: "16m"
           limits:
             memory: "256Mi"
-            cpu: "100m"
+            cpu: "200m"
+        readinessProbe:
+          tcpSocket:
+            port: 5672
+          initialDelaySeconds: 30
