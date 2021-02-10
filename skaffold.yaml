@@ -17,13 +17,16 @@ build:
   local: {}
 deploy:
   helm:
+    flags:
+      upgrade: ["--timeout", "600s"]
+      install: ["--timeout", "600s"]
     releases:
-      - name: springtrader 
+      - name: springtrader
         chartPath: ./charts/springtrader
         wait: true
         values:
-          image: springtrader 
-          sqlfdb: sqlfdb 
+          image: springtrader
+          sqlfdb: sqlfdb
         setValueTemplates:
           istioDomain: "{{.ISTIO_DOMAIN}}"
           productName: "{{.PRODUCT_NAME}}"
@@ -34,7 +37,7 @@ profiles:
   patches:
   - op: add
     path: /deploy/helm/releases/0/setValues
-    value: 
+    value:
       storageClassName: standard
 
 
