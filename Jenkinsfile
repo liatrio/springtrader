@@ -2,7 +2,7 @@ pipeline {
   agent any
   stages {
 
-    // Note: Add build stage here
+    // Note: Add build stage here test.
     stage('Build') {
       agent {
         label "lead-toolchain-skaffold"
