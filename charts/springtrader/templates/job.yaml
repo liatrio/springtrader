@@ -11,7 +11,7 @@ spec:
     spec:
       initContainers:
       - name: wait-for-nanodbserver
-        image: bitnami/kubectl:1.15
+        image: bitnami/kubectl:1.16
         args: ['wait','--for=condition=ready','pod/nanodbserver-0','--timeout=300s']
       containers:
       - name: generate-schema
@@ -42,7 +42,7 @@ spec:
     spec:
       initContainers:
       - name: wait-for-springtrader
-        image: bitnami/kubectl:1.15
+        image: bitnami/kubectl:1.16
         args: ['wait','--for=condition=available','deploy/springtrader','--timeout=300s']
       containers:
       - name: generate-data
